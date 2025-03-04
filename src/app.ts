@@ -35,4 +35,11 @@ io.on("connection", (socket: Socket) => {
             limit: (config.unit === "km/h") ? data.navigation.speedLimit.kph : data.navigation.speedLimit.mph
         });
     });
+
+    socket.on("get-fuel", () => {
+        socket.emit("get-fuel", {
+            capacity: data.truck.fuel.capacity,
+            value: data.truck.fuel.value,
+        });
+    })
 });

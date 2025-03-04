@@ -93,6 +93,20 @@ main {
             font-size: 25px;
         }
     }
+
+    & > #fuel{
+        width: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: row;
+
+        & > #fuel-indicator{
+            width: 250px;
+            height: 25px;
+            background: linear-gradient(to right, var(--color-5) 0%, var(--color-2) 0%);
+        }
+    }
 }
 
 footer {
