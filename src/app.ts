@@ -1,10 +1,10 @@
 //import
 import express, { Express, Request, Response } from "express";
 import http, { Server as HTTPServer } from "http";
-import { Server } from "socket.io";
+import { Server, Socket } from "socket.io";
 import config from "../config.json";
-import { data } from "./telemetry";
 import path from "node:path";
+import { data } from "./telemetry";
 
 const app: Express = express(); //Init app
 const staticPath = path.join(__dirname, '..', 'static')
@@ -23,4 +23,16 @@ app.get("/", (_: Request, res: Response) => { //Index.html
 
 server.listen(config.port, () => { //Listen on given port
     console.log("Started server: http://localhost:" + config.port);
+});
+
+io.on("connection", (socket: Socket) => {
+    console.log(`Client connected: ${socket.id}`);
+
+    socket.on("get-speed", () => {
+        socket.emit("get-speed", {
+            unit: config.unit,
+            speed: (config.unit === "km/h") ? data.truck.speed.kph : data.truck.speed.mph,
+            limit: (config.unit === "km/h") ? data.navigation.speedLimit.kph : data.navigation.speedLimit.mph
+        });
+    });
 });

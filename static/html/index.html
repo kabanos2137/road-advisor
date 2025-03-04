@@ -1,17 +1,18 @@
 <!doctype html>
 <html lang="en">
-  <head>
-      <link rel="shortcut icon" href="../icons/favicon.ico" type="image/x-icon">
-      
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <title>Road Advisor</title>
+    <head>
+        <link rel="shortcut icon" href="../icons/favicon.ico" type="image/x-icon">
 
-      <link rel="stylesheet" href="../style/index.css">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Road Advisor</title>
 
-      <script src="../script/index.js" defer></script>
-  </head>
-  <body>
+        <link rel="stylesheet" href="../style/index.css">
+
+        <script src="https://cdn.socket.io/4.7.2/socket.io.min.js" defer></script>
+        <script src="../script/index.js" defer></script>
+    </head>
+    <body>
     <nav>
         <div id="logo-and-name">
             <img src="../icons/favicon.ico" alt="logo">
@@ -19,10 +20,12 @@
         </div>
     </nav>
     <main>
-
+        <h1 id="speed">0</h1>
+        <h6 id="unit">km/h</h6>
+        <div id="speed-limit"><p>20</p></div>
     </main>
     <footer>
 
     </footer>
-  </body>
+    </body>
 </html>
