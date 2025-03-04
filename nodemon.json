@@ -1,6 +1,0 @@
-{
-  "verbose": true,
-  "ext": "ts css html js",
-  "watch": ["src", "static"],
-  "exec": "npm run execute"
-}

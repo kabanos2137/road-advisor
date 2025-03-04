@@ -6,3 +6,5 @@ setInterval(() => { //Loop this
     data = Telemetry.getData(); //Update 'data' variable
 }, 200);
 
+export { data };
+

@@ -2,10 +2,9 @@
   "name": "road-advisor",
   "version": "0.0.1",
   "description": "",
-  "main": "./dist/app.js",
+  "main": "./src/app.js",
   "scripts": {
-    "execute": "npx tsc && node ./dist/app.js",
-    "test": "nodemon"
+    "test": "concurrently \"tsc --watch\" \"nodemon /src/app.js\""
   },
   "author": "",
   "license": "ISC",
