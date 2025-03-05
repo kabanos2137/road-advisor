@@ -1,11 +1,23 @@
 // @ts-ignore
 const socket = io();
 
+let view: View = "DASHBOARD";
+
+const apps: App[] = [
+    {
+        name: "Dashboard",
+        logo: "../icons/favicon.ico",
+        view: "DASHBOARD"
+    }
+]
+
 setInterval(() => {
-    socket.emit("get-speed");
-    socket.emit("get-fuel");
-    socket.emit("get-adblue");
-    socket.emit("get-gear");
+    if(view == "DASHBOARD"){
+        socket.emit("get-speed");
+        socket.emit("get-fuel");
+        socket.emit("get-adblue");
+        socket.emit("get-gear");
+    }
 }, 150);
 
 socket.on("get-speed", (data: {
@@ -53,4 +65,18 @@ socket.on("get-gear", (data: {
     gear: number
 }) => {
     (document.querySelector("#gear > p") as HTMLElement).innerHTML = `${data.gear > 0 ? "A" : "R"}${Math.abs(data.gear)}`;
+});
+
+(document.querySelector("#apps") as HTMLElement).addEventListener("click", () => {
+    view = "APPS";
+    (document.querySelector("nav") as  HTMLElement).classList.toggle("not-displayed");
+    (document.querySelector("footer") as  HTMLElement).classList.toggle("not-displayed");
+    let main = document.querySelector("main") as HTMLElement;
+    main.classList.add("mid-stage");
+    setTimeout(() => {
+        main.classList.remove("dashboard");
+        main.classList.remove("mid-stage");
+        main.classList.add("apps");
+        main.innerHTML = ""
+    }, 500);
 });

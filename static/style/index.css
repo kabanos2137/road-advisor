@@ -21,9 +21,17 @@ body, html {
     color: var(--color-5);
 
     font-family: 'Ubuntu', sans-serif;
+
+    overflow: hidden;
 }
 
 nav {
+    &.not-displayed {
+        transform: translateY(-90px);
+    }
+
+    transition: transform 0.5s;
+
     width: 100%;
     height: 89px;
 
@@ -33,7 +41,7 @@ nav {
 
     display: flex;
     align-items: center;
-    justify-content: start;
+    justify-content: space-between;
     flex-direction: row;
 
     & > #logo-and-name {
@@ -48,96 +56,121 @@ nav {
             margin-right: 20px;
         }
     }
+
+    & > #apps {
+        margin-right: 20px;
+
+        & > span {
+            font-size: 49px;
+        }
+    }
 }
 
 main {
-    height: calc(100% - 180px);
-    width: 100%;
+    transition: height 0.5s, transform 0.5s, opacity 0.5s;
 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    & > h1{
-        font-size: 120px;
-        padding: 0;
-        margin: 0;
+    &.apps{
+        opacity: 1;
+        height: 100%;
+        transform: translateY(-110px);
     }
 
-    & > h6{
-        font-size: 20px;
-        padding: 0;
-        margin: 0;
+    &.mid-stage {
+        opacity: 0 !important;
+        height: 100%;
+        transform: translateY(-110px);
     }
 
-    & > #speed-limit{
-        margin-top: 20px;
-        height: 50px;
-        width: 50px;
-        font-weight: bold;
+    &.dashboard {
+        opacity: 1;
+        height: calc(100% - 180px);
+        width: 100%;
 
         display: flex;
-        align-items: center;
-        justify-content: center;
         flex-direction: column;
-
-        border-radius: 50%;
-        border: 5px solid red;
-        background-color: white;
-        color: black;
-
-        &.two-digit-limit {
-            font-size: 30px;
-        }
-
-        &.three-digit-limit {
-            font-size: 25px;
-        }
-    }
-
-    & > #fuel{
-        width: 350px;
-        display: flex;
+        justify-content: center;
         align-items: center;
-        justify-content: space-between;
-        flex-direction: row;
 
-        & > #fuel-indicator{
-            width: 250px;
-            height: 25px;
-            background: linear-gradient(to right, var(--color-5) 0%, var(--color-2) 0%);
-        }
-    }
-
-    & > #adblue{
-        width: 350px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-direction: row;
-
-        & > #adblue-indicator{
-            width: 250px;
-            height: 25px;
-            background: linear-gradient(to right, var(--color-6) 0%, var(--color-2) 0%);
-        }
-    }
-
-    & > #gear {
-        width: 65px;
-        align-items: center;
-        justify-content: space-between;
-        flex-direction: row;
-        display: flex;
-
-        & > span{
-            margin: 0;
+        & > h1{
+            font-size: 120px;
             padding: 0;
+            margin: 0;
         }
-        & > p{
+
+        & > h6{
             font-size: 20px;
+            padding: 0;
+            margin: 0;
+        }
+
+        & > #speed-limit{
+            margin-top: 20px;
+            height: 50px;
+            width: 50px;
             font-weight: bold;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+
+            border-radius: 50%;
+            border: 5px solid red;
+            background-color: white;
+            color: black;
+
+            &.two-digit-limit {
+                font-size: 30px;
+            }
+
+            &.three-digit-limit {
+                font-size: 25px;
+            }
+        }
+
+        & > #fuel{
+            width: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-direction: row;
+
+            & > #fuel-indicator{
+                width: 250px;
+                height: 25px;
+                background: linear-gradient(to right, var(--color-5) 0%, var(--color-2) 0%);
+            }
+        }
+
+        & > #adblue{
+            width: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-direction: row;
+
+            & > #adblue-indicator{
+                width: 250px;
+                height: 25px;
+                background: linear-gradient(to right, var(--color-6) 0%, var(--color-2) 0%);
+            }
+        }
+
+        & > #gear {
+            width: 65px;
+            align-items: center;
+            justify-content: space-between;
+            flex-direction: row;
+            display: flex;
+
+            & > span{
+                margin: 0;
+                padding: 0;
+            }
+            & > p{
+                font-size: 20px;
+                font-weight: bold;
+            }
         }
     }
 }
@@ -149,6 +182,12 @@ footer {
     background-color: var(--color-2);
 
     border-top: 1px solid var(--color-4);
+
+    &.not-displayed {
+        transform: translateY(90px);
+    }
+
+    transition: transform 0.5s;
 }
 
 h1, h6, p, span {
