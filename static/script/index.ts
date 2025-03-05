@@ -72,11 +72,72 @@ socket.on("get-gear", (data: {
     (document.querySelector("nav") as  HTMLElement).classList.toggle("not-displayed");
     (document.querySelector("footer") as  HTMLElement).classList.toggle("not-displayed");
     let main = document.querySelector("main") as HTMLElement;
-    main.classList.add("mid-stage");
+    main.classList.add("mid-stage-1");
     setTimeout(() => {
         main.classList.remove("dashboard");
-        main.classList.remove("mid-stage");
+        main.classList.remove("mid-stage-1");
+        main.classList.add("mid-stage-2");
         main.classList.add("apps");
-        main.innerHTML = ""
-    }, 500);
+        main.innerHTML = `
+            <div class="title">Apps</div>
+        `
+
+        apps.forEach((app, index) => {
+            main.innerHTML += `
+                <div class="app app-${index}">
+                    <img src="${app.logo}" alt="${app.name}">
+                    <p>${app.name}</p>
+                </div>
+            `;
+
+            (document.querySelector(`.app-${index}`) as HTMLElement).addEventListener("click", () => {
+                setApp(app.view);
+            })
+        })
+
+        setTimeout(() => {
+            main.classList.remove("mid-stage-2");
+        }, 300)
+    }, 300);
 });
+
+const setApp = (setView: View) => {
+    switch (setView) {
+        case "DASHBOARD":
+            view = "DASHBOARD";
+            let main = document.querySelector("main") as HTMLElement;
+            main.classList.add("mid-stage-2");
+            setTimeout(() => {
+                main.classList.remove("apps");
+                main.classList.remove("mid-stage-2");
+                main.classList.add("mid-stage-1");
+                main.classList.add("dashboard");
+
+                (document.querySelector("nav") as  HTMLElement).classList.toggle("not-displayed");
+                (document.querySelector("footer") as  HTMLElement).classList.toggle("not-displayed");
+
+                main.innerHTML = `
+                    <h1 id="speed">0</h1>
+                    <h6 id="unit">km/h</h6>
+                    <div id="speed-limit" class="three-digit-limit"><p>140</p></div>
+                    <div id="fuel">
+                        <p>Fuel</p>
+                        <div id="fuel-indicator"></div>
+                    </div>
+                    <div id="adblue">
+                        <p>AdBlue</p>
+                        <div id="adblue-indicator"></div>
+                    </div>
+                    <div id="gear">
+                        <span class="material-symbols-outlined">auto_transmission</span>
+                        <p>A0</p>
+                    </div>
+                `;
+
+                setTimeout(() => {
+                    main.classList.remove("mid-stage-1");
+                })
+            }, 300);
+            break;
+    }
+}
