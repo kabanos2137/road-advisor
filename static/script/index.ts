@@ -1,5 +1,5 @@
 // @ts-ignore
-const socket = io("http://192.168.1.31/");
+const socket = io();
 
 setInterval(() => {
     socket.emit("get-speed");
