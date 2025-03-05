@@ -6,6 +6,8 @@
     --color-3: #4A4A58;   /* Deep grayish purple */
     --color-4: #5D5865;   /* Dusty mauve */
     --color-5: #E4B363;   /* Warm golden contrast */
+    --color-6: #007db5;
+    --color-7: #ff3737;
 }
 
 body, html {
@@ -95,7 +97,7 @@ main {
     }
 
     & > #fuel{
-        width: 300px;
+        width: 350px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -105,6 +107,20 @@ main {
             width: 250px;
             height: 25px;
             background: linear-gradient(to right, var(--color-5) 0%, var(--color-2) 0%);
+        }
+    }
+
+    & > #adblue{
+        width: 350px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: row;
+
+        & > #adblue-indicator{
+            width: 250px;
+            height: 25px;
+            background: linear-gradient(to right, var(--color-6) 0%, var(--color-2) 0%);
         }
     }
 }

@@ -29,17 +29,30 @@ io.on("connection", (socket: Socket) => {
     console.log(`Client connected: ${socket.id}`);
 
     socket.on("get-speed", () => {
-        socket.emit("get-speed", {
-            unit: config.unit,
-            speed: (config.unit === "km/h") ? data.truck.speed.kph : data.truck.speed.mph,
-            limit: (config.unit === "km/h") ? data.navigation.speedLimit.kph : data.navigation.speedLimit.mph
-        });
+        if(data !== undefined){ //Emit only if data is not empty
+            socket.emit("get-speed", {
+                unit: config.unit,
+                speed: (config.unit === "km/h") ? data.truck.speed.kph : data.truck.speed.mph,
+                limit: (config.unit === "km/h") ? data.navigation.speedLimit.kph : data.navigation.speedLimit.mph
+            });
+        }
     });
 
     socket.on("get-fuel", () => {
-        socket.emit("get-fuel", {
-            capacity: data.truck.fuel.capacity,
-            value: data.truck.fuel.value,
-        });
-    })
+        if(data !== undefined){ //Emit only if data is not empty
+            socket.emit("get-fuel", {
+                capacity: data.truck.fuel.capacity,
+                value: data.truck.fuel.value,
+            });
+        }
+    });
+
+    socket.on("get-adblue", () => {
+        if(data !== undefined){ //Emit only if data is not empty
+            socket.emit("get-adblue", {
+                capacity: data.truck.adBlue.capacity,
+                value: data.truck.adBlue.value,
+            });
+        }
+    });
 });
