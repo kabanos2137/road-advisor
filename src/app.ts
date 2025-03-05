@@ -63,4 +63,14 @@ io.on("connection", (socket: Socket) => {
             });
         }
     });
+
+    socket.on("get-c-control", () => {
+        if(data !== undefined){
+            socket.emit("get-c-control", {
+                enabled: data.truck.cruiseControl.enabled,
+                value: config.unit === "km/h" ? data.truck.cruiseControl.kph : data.truck.cruiseControl.mph,
+                unit: config.unit,
+            })
+        }
+    })
 });

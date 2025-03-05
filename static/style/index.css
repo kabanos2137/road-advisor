@@ -216,7 +216,24 @@ main {
         }
 
         & > #gear {
-            width: 65px;
+            width: 140px;
+            align-items: center;
+            justify-content: space-between;
+            flex-direction: row;
+            display: flex;
+
+            & > span{
+                margin: 0;
+                padding: 0;
+            }
+            & > p{
+                font-size: 20px;
+                font-weight: bold;
+            }
+        }
+
+        & > #c-control {
+            width: 145px;
             align-items: center;
             justify-content: space-between;
             flex-direction: row;

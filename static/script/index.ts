@@ -17,6 +17,7 @@ setInterval(() => {
         socket.emit("get-fuel");
         socket.emit("get-adblue");
         socket.emit("get-gear");
+        socket.emit("get-c-control")
     }
 }, 150);
 
@@ -65,6 +66,14 @@ socket.on("get-gear", (data: {
     gear: number
 }) => {
     (document.querySelector("#gear > p") as HTMLElement).innerHTML = `${data.gear > 0 ? "A" : "R"}${Math.abs(data.gear)}`;
+});
+
+socket.on("get-c-control", (data: {
+    enabled: boolean,
+    value: number,
+    unit: "km/h" | "mph",
+})=> {
+    (document.querySelector("#c-control > p") as HTMLElement).innerHTML = `${(data.enabled) ? data.value : "-"} ${data.unit}`;
 });
 
 (document.querySelector("#apps") as HTMLElement).addEventListener("click", () => {
@@ -132,11 +141,15 @@ const setApp = (setView: View) => {
                         <span class="material-symbols-outlined">auto_transmission</span>
                         <p>A0</p>
                     </div>
+                    <div id="c-control">
+                        <span class="material-symbols-outlined">swap_driving_apps_wheel</span>
+                        <p>- km/h</p>
+                    </div>
                 `;
 
                 setTimeout(() => {
                     main.classList.remove("mid-stage-1");
-                })
+                }, 300);
             }, 300);
             break;
     }
