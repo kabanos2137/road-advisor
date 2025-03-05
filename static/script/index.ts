@@ -5,6 +5,7 @@ setInterval(() => {
     socket.emit("get-speed");
     socket.emit("get-fuel");
     socket.emit("get-adblue");
+    socket.emit("get-gear");
 }, 150);
 
 socket.on("get-speed", (data: {
@@ -15,7 +16,7 @@ socket.on("get-speed", (data: {
     (document.querySelector("#speed") as HTMLElement).innerText = data.speed.toString();
     (document.querySelector("#unit") as HTMLElement).innerText = data.unit;
     let speedLimit = (document.querySelector("#speed-limit") as HTMLElement);
-    speedLimit.innerText = data.limit.toString();
+    (speedLimit.children[0] as HTMLElement).innerText = data.limit.toString();
     speedLimit.classList.remove((data.limit.toString().length > 2) ? "two-digit-limit" : "three-digit-limit");
     speedLimit.classList.add((data.limit.toString().length > 2) ? "three-digit-limit" : "two-digit-limit")
 })
@@ -46,4 +47,10 @@ socket.on("get-adblue", (data: {
         (document.querySelector("#adblue > p") as HTMLElement).style.color = 'var(--color-5)';
         (document.querySelector("#adblue-indicator") as HTMLElement).style.background = `linear-gradient(to right, var(--color-6) ${percent}%, var(--color-2) ${percent}%)`;
     }
-})
+});
+
+socket.on("get-gear", (data: {
+    gear: number
+}) => {
+    (document.querySelector("#gear > p") as HTMLElement).innerHTML = `${data.gear > 0 ? "A" : "R"}${Math.abs(data.gear)}`;
+});

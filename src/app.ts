@@ -55,4 +55,12 @@ io.on("connection", (socket: Socket) => {
             });
         }
     });
+
+    socket.on("get-gear", () => {
+        if(data !== undefined){
+            socket.emit("get-gear", {
+                gear: data.truck.transmission.gear.displayed,
+            });
+        }
+    });
 });

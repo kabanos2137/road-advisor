@@ -123,6 +123,23 @@ main {
             background: linear-gradient(to right, var(--color-6) 0%, var(--color-2) 0%);
         }
     }
+
+    & > #gear {
+        width: 65px;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: row;
+        display: flex;
+
+        & > span{
+            margin: 0;
+            padding: 0;
+        }
+        & > p{
+            font-size: 20px;
+            font-weight: bold;
+        }
+    }
 }
 
 footer {
@@ -134,7 +151,7 @@ footer {
     border-top: 1px solid var(--color-4);
 }
 
-h1, h6, p {
+h1, h6, p, span {
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
