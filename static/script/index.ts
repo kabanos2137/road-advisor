@@ -82,7 +82,13 @@ socket.on("get-c-control", (data: {
 });
 
 socket.on("get-port-taken", (taken: boolean) => {
-    console.log(taken);
+    if(view == "SETTINGS"){
+        (document.querySelector("#port > input") as HTMLElement).style.borderColor = taken ? "var(--color-8)" : "var(--color-7)";
+    }
+});
+
+socket.on("set-port", (port: number) => {
+    window.location.href = `${window.location.protocol}//${window.location.hostname}:${port}`;
 });
 
 (document.querySelector("#apps") as HTMLElement).addEventListener("click", () => {

@@ -126,11 +126,16 @@ io.on("connection", (socket: Socket) => {
     })
 
     socket.on("set-config", (data: Config) => {
-        fs.writeFileSync(path.join(__dirname, "..", "config.json"), JSON.stringify(data, null, 2));
-        spawn(process.argv[0], process.argv.slice(1), {
-            detached: true,
-            stdio: "inherit"
-        });
-        process.exit(0);
+        if(data.port !== config().port){
+            fs.writeFileSync(path.join(__dirname, "..", "config.json"), JSON.stringify(data, null, 2));
+            socket.broadcast.emit("set-port", data.port);
+            spawn(process.argv[0], process.argv.slice(1), {
+                detached: true,
+                stdio: "inherit"
+            });
+            process.exit(0);
+        }else{
+            fs.writeFileSync(path.join(__dirname, "..", "config.json"), JSON.stringify(data, null, 2));
+        }
     })
 });
