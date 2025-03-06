@@ -70,6 +70,17 @@ nav {
 main {
     transition: height 0.3s, transform 0.3s, opacity 0.3s;
 
+    &.spotify {
+        opacity: 1;
+        height: calc(100% - 180px);
+        width: 100%;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
     &.settings {
         opacity: 1;
         height: calc(100% - 180px);
@@ -83,6 +94,7 @@ main {
         & > button {
             transition: border-radius 0.3s;
             width: 200px;
+            margin-top: 20px;
             border: 1px solid var(--color-5);
             background-color: var(--color-4);
             height: 37px;
@@ -330,8 +342,27 @@ footer {
 
     border-top: 1px solid var(--color-4);
 
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
     &.not-displayed {
         transform: translateY(90px);
+    }
+
+    & > p#info {
+        transition: opacity 0.3s;
+    }
+
+    & > p#info.displayed{
+        font-size: 19px;
+        opacity: 1;
+    }
+
+    & > p#info{
+        font-size: 19px;
+        opacity: 0;
     }
 
     transition: transform 0.3s;

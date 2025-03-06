@@ -9,4 +9,4 @@ interface Config {
     unit: "km/h" | "mph"
 }
 
-type View = "DASHBOARD" | "APPS" | "SETTINGS"
+type View = "DASHBOARD" | "APPS" | "SETTINGS" | "SPOTIFY";

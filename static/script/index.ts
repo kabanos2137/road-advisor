@@ -2,6 +2,7 @@
 const socket = io();
 
 let view: View = "DASHBOARD";
+let authTokenSpotify: string | undefined = undefined;
 
 const apps: App[] = [
     {
@@ -10,21 +11,40 @@ const apps: App[] = [
         view: "DASHBOARD"
     },
     {
+        name: "Spotify",
+        logo: "../icons/spotify.ico",
+        view: "SPOTIFY"
+    },
+    {
         name: "Settings",
         logo: "../icons/settings.ico",
         view: "SETTINGS"
-    }
+    },
 ]
 
 setInterval(() => {
+    socket.emit("get-token-spotify");
     if(view == "DASHBOARD"){
         socket.emit("get-speed");
         socket.emit("get-fuel");
         socket.emit("get-adblue");
         socket.emit("get-gear");
-        socket.emit("get-c-control")
+        socket.emit("get-c-control");
     }
 }, 150);
+
+window.addEventListener("load", () => {
+    if(window.location.href.split("?")[1] == "s=true"){
+        (document.querySelector("#info") as HTMLElement).innerHTML = "Successfully logged into Spotify!";
+        (document.querySelector("#info") as HTMLElement).classList.add("displayed");
+        setTimeout(()=>{
+            (document.querySelector("#info") as HTMLElement).classList.remove("displayed");
+            setTimeout(()=>{
+                (document.querySelector("#info") as HTMLElement).innerHTML = "";
+            }, 300);
+        }, 9700);
+    }
+});
 
 socket.on("get-speed", (data: {
     unit: "km/h" | "mph",
@@ -89,6 +109,10 @@ socket.on("get-port-taken", (taken: boolean) => {
 
 socket.on("set-port", (port: number) => {
     window.location.href = `${window.location.protocol}//${window.location.hostname}:${port}`;
+});
+
+socket.on("get-token-spotify", (data: string | undefined) => {
+    authTokenSpotify = data;
 });
 
 (document.querySelector("#apps") as HTMLElement).addEventListener("click", () => {
@@ -196,8 +220,13 @@ const setApp = (setView: View) => {
                                     <option ${data.unit === "mph" ? "selected" : ""} value="mph">Imperial</option>
                                 </select>
                             </div>
+                            <button id="login-spotify">Log into spotify</button>
                             <button id="save-button">Save</button>
                         `;
+
+                        (document.querySelector("#login-spotify") as HTMLElement).addEventListener("click", () => {
+                            window.location.href = "/login";
+                        });
 
                         (document.querySelector("#save-button") as HTMLElement).addEventListener("click", () => {
                             let port = parseInt((document.querySelector("#port > input") as HTMLInputElement).value);
@@ -240,6 +269,26 @@ const setApp = (setView: View) => {
                             main.classList.remove("mid-stage-1");
                         }, 300);
                     });
+            }, 300);
+            break;
+        case "SPOTIFY":
+            main.classList.add("mid-stage-2");
+            setTimeout(() => {
+                main.classList.remove("apps");
+                main.classList.remove("mid-stage-2");
+                main.classList.add("mid-stage-1");
+                main.classList.add("spotify");
+
+                (document.querySelector("nav") as HTMLElement).classList.toggle("not-displayed");
+                (document.querySelector("footer") as HTMLElement).classList.toggle("not-displayed");
+
+                (document.querySelector("main") as HTMLElement).innerHTML = "";
+
+                view = "SPOTIFY";
+
+                setTimeout(() => {
+                    main.classList.remove("mid-stage-1");
+                }, 300);
             }, 300);
             break;
     }
