@@ -6,8 +6,13 @@ let view: View = "DASHBOARD";
 const apps: App[] = [
     {
         name: "Dashboard",
-        logo: "../icons/favicon.ico",
+        logo: "../icons/home.ico",
         view: "DASHBOARD"
+    },
+    {
+        name: "Settings",
+        logo: "../icons/settings.ico",
+        view: "SETTINGS"
     }
 ]
 
@@ -76,6 +81,10 @@ socket.on("get-c-control", (data: {
     (document.querySelector("#c-control > p") as HTMLElement).innerHTML = `${(data.enabled) ? data.value : "-"} ${data.unit}`;
 });
 
+socket.on("get-port-taken", (taken: boolean) => {
+    console.log(taken);
+});
+
 (document.querySelector("#apps") as HTMLElement).addEventListener("click", () => {
     view = "APPS";
     (document.querySelector("nav") as  HTMLElement).classList.toggle("not-displayed");
@@ -98,11 +107,13 @@ socket.on("get-c-control", (data: {
                     <p>${app.name}</p>
                 </div>
             `;
+        });
 
-            (document.querySelector(`.app-${index}`) as HTMLElement).addEventListener("click", () => {
-                setApp(app.view);
+        for(let i = 0; i < apps.length; i++){
+            (document.querySelector(`.app-${i}`) as HTMLElement).addEventListener("click", () => {
+                setApp(apps[i].view);
             })
-        })
+        }
 
         setTimeout(() => {
             main.classList.remove("mid-stage-2");
@@ -111,10 +122,9 @@ socket.on("get-c-control", (data: {
 });
 
 const setApp = (setView: View) => {
+    let main = document.querySelector("main") as HTMLElement;
     switch (setView) {
         case "DASHBOARD":
-            view = "DASHBOARD";
-            let main = document.querySelector("main") as HTMLElement;
             main.classList.add("mid-stage-2");
             setTimeout(() => {
                 main.classList.remove("apps");
@@ -122,8 +132,8 @@ const setApp = (setView: View) => {
                 main.classList.add("mid-stage-1");
                 main.classList.add("dashboard");
 
-                (document.querySelector("nav") as  HTMLElement).classList.toggle("not-displayed");
-                (document.querySelector("footer") as  HTMLElement).classList.toggle("not-displayed");
+                (document.querySelector("nav") as HTMLElement).classList.toggle("not-displayed");
+                (document.querySelector("footer") as HTMLElement).classList.toggle("not-displayed");
 
                 main.innerHTML = `
                     <h1 id="speed">0</h1>
@@ -147,9 +157,83 @@ const setApp = (setView: View) => {
                     </div>
                 `;
 
+                view = "DASHBOARD";
+
                 setTimeout(() => {
                     main.classList.remove("mid-stage-1");
                 }, 300);
+            }, 300);
+            break;
+        case "SETTINGS":
+            main.classList.add("mid-stage-2");
+            setTimeout(() => {
+                main.classList.remove("apps");
+                main.classList.remove("mid-stage-2");
+                main.classList.add("mid-stage-1");
+                main.classList.add("settings");
+
+                (document.querySelector("nav") as HTMLElement).classList.toggle("not-displayed");
+                (document.querySelector("footer") as HTMLElement).classList.toggle("not-displayed");
+
+                fetch("/api/config")
+                    .then(res => res.json())
+                    .then((data: Config) => {
+                        main.innerHTML = `
+                            <div id="port" class="input-section">
+                                <p>Port (0 - 65535):</p>
+                                <input type="text" value="${data.port}">
+                            </div>
+                            <div id="units" class="input-section">
+                                <p>Units:</p>
+                                <select>
+                                    <option ${data.unit === "km/h" ? "selected" : ""} value="km/h">Metric</option>
+                                    <option ${data.unit === "mph" ? "selected" : ""} value="mph">Imperial</option>
+                                </select>
+                            </div>
+                            <button id="save-button">Save</button>
+                        `;
+
+                        (document.querySelector("#save-button") as HTMLElement).addEventListener("click", () => {
+                            let port = parseInt((document.querySelector("#port > input") as HTMLInputElement).value);
+                            if (port === null){
+                                port = 0;
+                            }
+                            socket.emit("set-config", {
+                                port: port,
+                                unit: (document.querySelector("#units > select") as HTMLInputElement).value,
+                            });
+                            if(window.location.port !== port.toString()){
+                                window.location.href = `${window.location.protocol}//${window.location.hostname}:${port}`;
+                            }else{
+                                (document.querySelector("#apps") as HTMLElement).click();
+                            }
+                        });
+
+                        (document.querySelector("#port > input") as HTMLElement).addEventListener("keydown", (e) => {
+                            let data = (e as KeyboardEvent).key;
+                            if(data !== "Backspace"){
+                                if(Number.isNaN(parseInt(data)) || (document.querySelector("#port > input") as HTMLInputElement).value.length >= 5 || parseInt((document.querySelector("#port > input") as HTMLInputElement).value + data) > 65535){
+                                    e.preventDefault();
+                                    return;
+                                }else{
+                                    socket.emit("get-port-taken", parseInt((document.querySelector("#port > input") as HTMLInputElement).value + data));
+                                }
+                            }else{
+                                let port = (document.querySelector("#port > input") as HTMLInputElement).value
+                                if(port.length <= 1){
+                                    socket.emit("get-port-taken", 0);
+                                }else{
+                                    socket.emit("get-port-taken", parseInt((document.querySelector("#port > input") as HTMLInputElement).value.slice(0, -1)));
+                                }
+                            }
+                        })
+
+                        view = "SETTINGS";
+
+                        setTimeout(() => {
+                            main.classList.remove("mid-stage-1");
+                        }, 300);
+                    });
             }, 300);
             break;
     }

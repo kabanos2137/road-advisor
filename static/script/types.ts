@@ -4,4 +4,9 @@ interface App {
     view: View
 }
 
-type View = "DASHBOARD" | "APPS"
+interface Config {
+    port: number;
+    unit: "km/h" | "mph"
+}
+
+type View = "DASHBOARD" | "APPS" | "SETTINGS"

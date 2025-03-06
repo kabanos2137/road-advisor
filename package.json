@@ -4,7 +4,7 @@
   "description": "",
   "main": "./src/app.js",
   "scripts": {
-    "test": "concurrently \"tsc --watch\" \"nodemon /src/app.js\""
+    "test": "concurrently \"tsc --watch\" \"nodemon /src/app.js --ignore /config.json\""
   },
   "author": "",
   "license": "ISC",
@@ -12,11 +12,13 @@
     "@types/express": "^5.0.0",
     "@types/node": "^22.13.9",
     "@types/socket.io": "^3.0.2",
+    "concurrently": "^9.1.2",
     "nodemon": "^3.1.9",
     "typescript": "^5.8.2"
   },
   "dependencies": {
     "express": "^4.21.2",
+    "net": "^1.0.2",
     "socket.io": "^4.8.1",
     "trucksim-telemetry": "^0.21.0"
   }
