@@ -2,7 +2,7 @@
 const socket = io();
 
 let view: View = "DASHBOARD";
-let authTokenSpotify: string | undefined = undefined;
+let authTokenSpotify: string | null = null;
 
 const apps: App[] = [
     {
@@ -34,15 +34,23 @@ setInterval(() => {
 }, 150);
 
 window.addEventListener("load", () => {
+    console.log(authTokenSpotify);
     if(window.location.href.split("?")[1] == "s=true"){
-        (document.querySelector("#info") as HTMLElement).innerHTML = "Successfully logged into Spotify!";
-        (document.querySelector("#info") as HTMLElement).classList.add("displayed");
         setTimeout(()=>{
-            (document.querySelector("#info") as HTMLElement).classList.remove("displayed");
-            setTimeout(()=>{
-                (document.querySelector("#info") as HTMLElement).innerHTML = "";
-            }, 300);
-        }, 9700);
+            console.log(authTokenSpotify);
+            if(authTokenSpotify !== null){
+                (document.querySelector("#info") as HTMLElement).innerHTML = "Successfully logged into Spotify!";
+                (document.querySelector("#info") as HTMLElement).classList.add("displayed");
+                const newUrl = window.location.pathname + window.location.search.replace(/[?&]s=true/, "");
+                window.history.replaceState(null, "", newUrl);
+                setTimeout(()=>{
+                    (document.querySelector("#info") as HTMLElement).classList.remove("displayed");
+                    setTimeout(()=>{
+                        (document.querySelector("#info") as HTMLElement).innerHTML = "";
+                    }, 300);
+                }, 9700);
+            }
+        }, 1000);
     }
 });
 
@@ -111,7 +119,7 @@ socket.on("set-port", (port: number) => {
     window.location.href = `${window.location.protocol}//${window.location.hostname}:${port}`;
 });
 
-socket.on("get-token-spotify", (data: string | undefined) => {
+socket.on("get-token-spotify", (data: string | null) => {
     authTokenSpotify = data;
 });
 
@@ -282,7 +290,15 @@ const setApp = (setView: View) => {
                 (document.querySelector("nav") as HTMLElement).classList.toggle("not-displayed");
                 (document.querySelector("footer") as HTMLElement).classList.toggle("not-displayed");
 
-                (document.querySelector("main") as HTMLElement).innerHTML = "";
+                console.log(authTokenSpotify);
+                if(authTokenSpotify === null) {
+                    (document.querySelector("main") as HTMLElement).innerHTML = `
+                        <h1>You are not logged in to Spotify!</h1>
+                        <p>Go to settings to log in.</p>
+                    `;
+                }else{
+                    (document.querySelector("main") as HTMLElement).innerHTML = ``;
+                }
 
                 view = "SPOTIFY";
 
