@@ -35,22 +35,22 @@ setInterval(() => {
 
 window.addEventListener("load", () => {
     console.log(authTokenSpotify);
+    let info = (document.querySelector("#info") as HTMLElement)
     if(window.location.href.split("?")[1] == "s=true"){
+        info.innerHTML = "Successfully logged into Spotify!";
+        info.classList.add("displayed");
+        const newUrl = window.location.pathname + window.location.search.replace(/[?&]s=true/, "");
+        window.history.replaceState(null, "", newUrl);
         setTimeout(()=>{
-            console.log(authTokenSpotify);
-            if(authTokenSpotify !== null){
-                (document.querySelector("#info") as HTMLElement).innerHTML = "Successfully logged into Spotify!";
-                (document.querySelector("#info") as HTMLElement).classList.add("displayed");
-                const newUrl = window.location.pathname + window.location.search.replace(/[?&]s=true/, "");
-                window.history.replaceState(null, "", newUrl);
+            if(info){
+                info.classList.remove("displayed");
                 setTimeout(()=>{
-                    (document.querySelector("#info") as HTMLElement).classList.remove("displayed");
-                    setTimeout(()=>{
-                        (document.querySelector("#info") as HTMLElement).innerHTML = "";
-                    }, 300);
-                }, 9700);
+                    if(info){
+                        info.innerHTML = "";
+                    }
+                }, 300);
             }
-        }, 1000);
+        }, 9700);
     }
 });
 
@@ -130,7 +130,12 @@ socket.on("get-token-spotify", (data: string | null) => {
     let main = document.querySelector("main") as HTMLElement;
     main.classList.add("mid-stage-1");
     setTimeout(() => {
+        (document.querySelector("footer") as  HTMLElement).innerHTML = "";
+
         main.classList.remove("dashboard");
+        main.classList.remove("settings");
+        main.classList.remove("spotify");
+        main.classList.remove("spotify-info");
         main.classList.remove("mid-stage-1");
         main.classList.add("mid-stage-2");
         main.classList.add("apps");
@@ -292,12 +297,67 @@ const setApp = (setView: View) => {
 
                 console.log(authTokenSpotify);
                 if(authTokenSpotify === null) {
+                    (document.querySelector("main") as HTMLElement).classList.add("spotify-info");
                     (document.querySelector("main") as HTMLElement).innerHTML = `
                         <h1>You are not logged in to Spotify!</h1>
                         <p>Go to settings to log in.</p>
                     `;
                 }else{
-                    (document.querySelector("main") as HTMLElement).innerHTML = ``;
+                    (document.querySelector("main") as HTMLElement).classList.add("spotify-normal");
+                    (document.querySelector("main") as HTMLElement).innerHTML = `
+                        <section id="spotify-side-bar">
+                            <div class="spotify-side-bar-icon selected">
+                                <span class="material-symbols-outlined">home</span>
+                            </div>
+                            <div class="spotify-side-bar-icon">
+                                <span class="material-symbols-outlined">search</span>
+                            </div>
+                            <div class="spotify-side-bar-icon">
+                                <span class="material-symbols-outlined">favorite</span>
+                            </div>
+                        </section>
+                        <main id="spotify-main">
+                            <h1></h1>
+                        </main>
+                    `;
+
+                    spotifyDisplayMainPage().catch((error: Error) => {
+                        console.log(error);
+                    });
+
+                    Array.from(document.querySelectorAll(".spotify-side-bar-icon")).forEach((el) => {
+                        let element = el as HTMLElement;
+                        element.addEventListener("click", () => {
+                            if(!element.classList.contains("selected")){
+                                Array.from(document.querySelectorAll(".spotify-side-bar-icon")).forEach((el2) => {
+                                    let element2 = el2 as HTMLElement;
+                                    if(element2.classList.contains("selected")){
+                                        element2.classList.remove("selected");
+                                    }
+                                });
+                                element.classList.add("selected");
+                                (document.querySelector("#spotify-main") as HTMLElement).className = "";
+                                (document.querySelector("#spotify-main") as HTMLElement).classList.add('spotify-' + element.children[0].innerHTML);
+                                switch (element.children[0].innerHTML){
+                                    case "home":
+                                        spotifyDisplayMainPage().catch((error: Error) => {
+                                            console.log(error);
+                                        });
+                                        break;
+                                    case "search":
+                                        spotifyDisplaySearch().catch((error: Error) => {
+                                            console.log(error);
+                                        });
+                                        break;
+                                    case "favorite":
+                                        spotifyDisplayFavorites().catch((error: Error) => {
+                                            console.log(error);
+                                        });
+                                        break;
+                                }
+                            }
+                        });
+                    });
                 }
 
                 view = "SPOTIFY";
@@ -308,4 +368,39 @@ const setApp = (setView: View) => {
             }, 300);
             break;
     }
+}
+
+const spotifyDisplayMainPage = async () => {
+    let spotifyMain = document.querySelector("#spotify-main") as HTMLElement;
+    spotifyMain.classList.add("spotify-info");
+    spotifyMain.innerHTML = `<h1>Loading...<h1>`
+    const response = await fetch("https://api.spotify.com/v1/me", {
+        headers: {
+            "Authorization": `Bearer ${authTokenSpotify}`,
+            "Content-Type": "application/json"
+        }
+    });
+
+    if(!response.ok){
+        throw new Error("Failed to fetch spotify user data.");
+    }
+
+    let data = await response.json();
+
+    spotifyMain.classList.remove("spotify-info");
+    spotifyMain.innerHTML = `
+        <h1>Hello, ${data.display_name}!</h1>
+    `;
+}
+
+const spotifyDisplaySearch = async () => {
+    let spotifyMain = document.querySelector("#spotify-main") as HTMLElement;
+    spotifyMain.classList.add("spotify-info");
+    spotifyMain.innerHTML = `<h1>Loading...<h1>`
+}
+
+const spotifyDisplayFavorites = async () => {
+    let spotifyMain = document.querySelector("#spotify-main") as HTMLElement;
+    spotifyMain.classList.add("spotify-info");
+    spotifyMain.innerHTML = `<h1>Loading...<h1>`
 }
