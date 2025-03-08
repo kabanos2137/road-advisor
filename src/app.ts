@@ -1,5 +1,5 @@
 //import
-import express, { Express, Request, Response } from "express";
+import express, {Express, Request, Response} from "express";
 import http, { Server as HTTPServer } from "http";
 import { Server, Socket } from "socket.io";
 import path from "node:path";
@@ -23,15 +23,15 @@ const io = new Server(server, { //Init socket.io
     }
 });
 
-const spotifyApi = new SpotifyApi({
-    clientId: process.env.SPOTIFY_CLIENT_ID,
-    clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-    redirectUri: "http://localhost/callback"
-})
-
 const config = () => {
     return JSON.parse(fs.readFileSync(path.join(__dirname, "..", "config.json")).toString()) as Config;
 }
+
+const spotifyApi = new SpotifyApi({
+    clientId: process.env.SPOTIFY_CLIENT_ID,
+    clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+    redirectUri: `http://${process.env.HOST}:${config().port}/callback`
+});
 
 const isPortInUse = (port: number): Promise<boolean> => {
     return new Promise((resolve) => {
@@ -66,15 +66,29 @@ app.get("/callback", async (req: Request, res: Response) => {
         const data = await spotifyApi.authorizationCodeGrant(code);
         spotifyApi.setAccessToken(data.body['access_token']);
         spotifyApi.setRefreshToken(data.body['refresh_token']);
-        res.send("Logged in successfully!");
+        res.redirect("/result_success");
     } catch (error) {
         console.error(error);
-        res.send("Login failed!");
+        res.redirect("/result_failure");
     }
 });
 
+app.get("/result_success", (req, res) => {
+    res.status(200).sendFile(path.join(staticPath, "html", "success.html"));
+});
+
+app.get("/result_failure", (req, res) => {
+    res.status(200).sendFile(path.join(staticPath, "html", "failure.html"));
+})
+
 app.get("/api/config", (_: Request, res: Response) => {
     res.status(200).send(config());
+});
+
+app.get("/api/spotify", (_: Request, res: Response) => {
+    res.status(200).send({
+        token: spotifyApi.getAccessToken(),
+    });
 });
 
 server.listen(config().port, () => { //Listen on given port

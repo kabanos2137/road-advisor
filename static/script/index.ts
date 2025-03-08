@@ -10,6 +10,11 @@ const apps: App[] = [
         view: "DASHBOARD"
     },
     {
+        name: "Spotify",
+        logo: "../icons/spotify.ico",
+        view: "SPOTIFY"
+    },
+    {
         name: "Settings",
         logo: "../icons/settings.ico",
         view: "SETTINGS"
@@ -98,8 +103,7 @@ socket.on("set-port", (port: number) => {
     let main = document.querySelector("main") as HTMLElement;
     main.classList.add("mid-stage-1");
     setTimeout(() => {
-        main.classList.remove("dashboard");
-        main.classList.remove("mid-stage-1");
+        main.classList.remove("dashboard", "settings", "spotify", "mid-stage-1");
         main.classList.add("mid-stage-2");
         main.classList.add("apps");
         main.innerHTML = `
@@ -242,5 +246,7 @@ const setApp = (setView: View) => {
                     });
             }, 300);
             break;
+        case "SPOTIFY":
+            switchToSpotify();
     }
 }

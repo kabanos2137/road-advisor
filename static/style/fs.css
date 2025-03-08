@@ -1,0 +1,94 @@
+:root {
+    --color-1: #2D2A34;   /* Dark slate gray */
+    --color-2: #3E3B47;   /* Charcoal gray */
+    --color-3: #4A4A58;   /* Deep grayish purple */
+    --color-4: #5D5865;   /* Dusty mauve */
+    --color-5: #E4B363;   /* Warm golden contrast */
+    --color-6: #007db5;
+    --color-7: #ff3737;
+    --color-8: #98c500;
+}
+
+body, html {
+    width: 100%;
+    height: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    background: radial-gradient(circle, var(--color-3), var(--color-1));
+    color: var(--color-5);
+
+    font-family: 'Ubuntu', sans-serif;
+
+    overflow: hidden;
+}
+
+nav {
+    width: 100%;
+    height: 89px;
+
+    background-color: var(--color-2);
+
+    border-bottom: 1px solid var(--color-4);
+
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    flex-direction: row;
+
+    & > #logo-and-name {
+        margin-left: 20px;
+
+        display: flex;
+        align-items: center;
+        justify-content: start;
+        flex-direction: row;
+
+        & > img {
+            margin-right: 20px;
+        }
+    }
+}
+
+main {
+    opacity: 1;
+    height: calc(100% - 180px);
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    & > h1{
+        font-size: 80px;
+        padding: 0;
+        margin: 0;
+    }
+
+    & > a{
+        text-decoration: underline;
+        color: var(--color-5);
+
+        font-size: 20px;
+        padding: 0;
+        margin: 0;
+    }
+}
+
+footer {
+    width: 100%;
+    height: 89px;
+
+    background-color: var(--color-2);
+
+    border-top: 1px solid var(--color-4);
+}
+
+h1, h6, p, span, button, select, a {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
