@@ -7,6 +7,10 @@ import { data } from "./telemetry";
 import * as fs from "node:fs";
 import { spawn } from "node:child_process";
 import net from "net";
+import dotenv from "dotenv";
+import SpotifyApi from "spotify-web-api-node"
+
+dotenv.config();
 
 const app: Express = express(); //Init app
 const staticPath = path.join(__dirname, '..', 'static')
@@ -18,6 +22,12 @@ const io = new Server(server, { //Init socket.io
         origin: "*",
     }
 });
+
+const spotifyApi = new SpotifyApi({
+    clientId: process.env.SPOTIFY_CLIENT_ID,
+    clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+    redirectUri: "http://localhost/callback"
+})
 
 const config = () => {
     return JSON.parse(fs.readFileSync(path.join(__dirname, "..", "config.json")).toString()) as Config;
@@ -42,6 +52,25 @@ const isPortInUse = (port: number): Promise<boolean> => {
 
 app.get("/", (_: Request, res: Response) => { //Index.html
     res.status(200).sendFile(path.join(staticPath, "html", "index.html"));
+});
+
+app.get("/login", (_: Request, res: Response) => {
+   const scopes = ['user-read-private', 'user-read-email'];
+   const authUrl = spotifyApi.createAuthorizeURL(scopes, '');
+   res.redirect(authUrl);
+});
+
+app.get("/callback", async (req: Request, res: Response) => {
+    const code = req.query.code as string;
+    try {
+        const data = await spotifyApi.authorizationCodeGrant(code);
+        spotifyApi.setAccessToken(data.body['access_token']);
+        spotifyApi.setRefreshToken(data.body['refresh_token']);
+        res.send("Logged in successfully!");
+    } catch (error) {
+        console.error(error);
+        res.send("Login failed!");
+    }
 });
 
 app.get("/api/config", (_: Request, res: Response) => {
