@@ -98,8 +98,9 @@ socket.on("set-port", (port: number) => {
 
 (document.querySelector("#apps") as HTMLElement).addEventListener("click", () => {
     view = "APPS";
-    (document.querySelector("nav") as  HTMLElement).classList.toggle("not-displayed");
-    (document.querySelector("footer") as  HTMLElement).classList.toggle("not-displayed");
+    (document.querySelector("nav") as HTMLElement).classList.add("not-displayed");
+    (document.querySelector("footer") as HTMLElement).classList.add("not-displayed");
+    (document.querySelector("footer") as HTMLElement).classList.remove("spotify");
     let main = document.querySelector("main") as HTMLElement;
     main.classList.add("mid-stage-1");
     setTimeout(() => {
