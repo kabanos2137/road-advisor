@@ -88,6 +88,10 @@ const displaySpotify = (data: {token: string}) => {
                     break;
                 case "spotify-sidebar-button-search":
                     openPageSearch();
+                    break;
+                case "spotify-sidebar-button-favorite":
+                    openPageFavorite();
+                    break;
             }
 
             currentlySelected = element;
@@ -144,9 +148,10 @@ const spotifyRecommendationPopulate = () => {
     })
         .then(res => res.json())
         .then(data => {
+            console.log(data);
             let topTracks: HTMLElement[] = [];
 
-            data.items.forEach((item: any) => {
+            data.items.forEach((item: any, index: number) => {
                 let div = document.createElement("div");
                 div.classList.add("spotify-recommendation-item");
 
@@ -190,12 +195,14 @@ const spotifyRecommendationPopulate = () => {
                 contentContainer.style.justifyContent = "center";
 
                 contentContainer.innerHTML = `
-                    <h1></h1>
+                    <h1>${index + 1}.</h1>
                     <h2>${item.name}</h2>
                     <h3>${item.artists[0].name}</h3>    
                 `
 
                 div.appendChild(contentContainer);
+
+                div.classList.add(`spotify-recommendation-item-${index + 1}`);
 
                 topTracks.push(div);
             });
@@ -207,15 +214,8 @@ const spotifyRecommendationPopulate = () => {
             list.innerHTML = "<span id='spotify-recommendation-tracks-left' class=\"material-symbols-outlined\">chevron_left</span>";
 
             topTracks.forEach((track: HTMLElement, index: number) => {
-                if(index === 0){
-                    track.children[1].children[0].innerHTML = `${topTracks.length}.`
-                    track.classList.add("spotify-recommendation-item-hidden", `spotify-recommendation-item-${index}`);
-                }else if(index < 4){
-                    track.children[1].children[0].innerHTML = `${index}.`
-                    track.classList.add(`spotify-recommendation-item-${index}`);
-                }else{
-                    track.children[1].children[0].innerHTML = `${index}.`;
-                    track.classList.add("spotify-recommendation-item-hidden", `spotify-recommendation-item-${index}`);
+                if(index == 0 || index > 3){
+                    track.classList.add("spotify-recommendation-item-hidden");
                 }
                 list.appendChild(track);
             });
@@ -240,9 +240,9 @@ const spotifyRecommendationPopulate = () => {
             left.addEventListener("click", () => {
                 if(!clicked){
                     clicked = true;
-                    list.children[5].classList.add("spotify-recommendation-item-hidden");
-                    list.children[2].classList.remove("spotify-recommendation-item-hidden");
-                    list.insertBefore(list.children[list.children.length - 2], list.children[2]);
+                    list.children[4].classList.add("spotify-recommendation-item-hidden");
+                    list.children[1].classList.remove("spotify-recommendation-item-hidden");
+                    list.insertBefore(list.children[list.children.length - 2], list.children[1]);
                     setTimeout(() => {
                         clicked = false;
                     }, 300)
@@ -256,8 +256,9 @@ const spotifyRecommendationPopulate = () => {
     })
         .then(res => res.json())
         .then(data => {
+            console.log(data);
             let topArtists: HTMLElement[] = [];
-            data.items.forEach((item: any) => {
+            data.items.forEach((item: any, index: number) => {
                 let div = document.createElement("div");
                 div.classList.add("spotify-recommendation-item");
 
@@ -300,13 +301,14 @@ const spotifyRecommendationPopulate = () => {
                 contentContainer.style.alignItems = "center";
                 contentContainer.style.justifyContent = "center";
 
-
                 contentContainer.innerHTML = `
-                    <h1></h1>
+                    <h1>${index + 1}.</h1>
                     <h2>${item.name}</h2> 
                 `
 
                 div.appendChild(contentContainer);
+
+                div.classList.add(`spotify-recommendation-item-${index + 1}`);
 
                 topArtists.push(div);
             });
@@ -318,15 +320,8 @@ const spotifyRecommendationPopulate = () => {
             list.innerHTML = "<span id='spotify-recommendation-artists-left' class=\"material-symbols-outlined\">chevron_left</span>";
 
             topArtists.forEach((track: HTMLElement, index: number) => {
-                if(index === 0){
-                    track.children[1].children[0].innerHTML = `${topArtists.length}.`
-                    track.classList.add("spotify-recommendation-item-hidden", `spotify-recommendation-item-${index}`);
-                }else if(index < 4){
-                    track.children[1].children[0].innerHTML = `${index}.`
-                    track.classList.add(`spotify-recommendation-item-${index}`);
-                }else{
-                    track.children[1].children[0].innerHTML = `${index}.`;
-                    track.classList.add("spotify-recommendation-item-hidden", `spotify-recommendation-item-${index}`);
+                if(index == 0 || index > 3){
+                    track.classList.add("spotify-recommendation-item-hidden");
                 }
                 list.appendChild(track);
             });
@@ -351,9 +346,9 @@ const spotifyRecommendationPopulate = () => {
             left.addEventListener("click", () => {
                 if(!clicked){
                     clicked = true;
-                    list.children[5].classList.add("spotify-recommendation-item-hidden");
-                    list.children[2].classList.remove("spotify-recommendation-item-hidden");
-                    list.insertBefore(list.children[list.children.length - 2], list.children[2]);
+                    list.children[4].classList.add("spotify-recommendation-item-hidden");
+                    list.children[1].classList.remove("spotify-recommendation-item-hidden");
+                    list.insertBefore(list.children[list.children.length - 2], list.children[1]);
                     setTimeout(() => {
                         clicked = false;
                     }, 300)
@@ -582,13 +577,21 @@ const populateSearch = (type, data) => {
         left.addEventListener("click", () => {
             if(!clicked){
                 clicked = true;
-                list.children[5].classList.add("spotify-search-item-hidden");
-                list.children[2].classList.remove("spotify-search-item-hidden");
-                list.insertBefore(list.children[list.children.length - 2], list.children[2]);
+                list.children[4].classList.add("spotify-search-item-hidden");
+                list.children[1].classList.remove("spotify-search-item-hidden");
+                list.insertBefore(list.children[list.children.length - 2], list.children[1]);
                 setTimeout(() => {
                     clicked = false;
                 }, 300)
             }
         });
     }
+}
+
+const openPageFavorite = () => {
+    let spotifyCenter = document.querySelector("#spotify-center") as HTMLElement;
+
+    spotifyCenter.innerHTML = `
+        
+    `;
 }
