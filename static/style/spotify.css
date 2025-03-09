@@ -125,7 +125,7 @@ footer.spotify {
     scrollbar-width: thin;
 }
 
-.spotify-recommendation {
+.spotify-recommendation, .spotify-search-results {
     display: flex;
     justify-content: start;
     align-items: center;
@@ -147,7 +147,7 @@ footer.spotify {
     }
 }
 
-.spotify-recommendation-list {
+.spotify-recommendation-list, .spotify-search-result-list {
     height: 200px;
     width: auto;
     display: flex;
@@ -159,7 +159,7 @@ footer.spotify {
         font-size: 35px;
     }
 
-    & > .spotify-recommendation-item {
+    & > .spotify-recommendation-item, & > .spotify-search-item {
         transition: height 0.3s, width 0.3s, margin 0.3s;
 
         margin-left: 25px;
@@ -168,7 +168,17 @@ footer.spotify {
         aspect-ratio: 3 / 2;
         border-radius: 15px;
 
-        &.spotify-recommendation-item-hidden {
+        & > .spotify-background-div {
+            transition: filter 0.3s;
+        }
+
+        &:not(.spotify-recommendation-item-hidden):hover, &:not(.spotify-search-item-hidden):hover{
+            & > .spotify-background-div{
+                filter: blur(0) !important;
+            }
+        }
+
+        &.spotify-recommendation-item-hidden, &.spotify-search-item-hidden {
             & > .spotify-content-container > * {
                 font-size: 0;
             }
@@ -200,4 +210,17 @@ footer.spotify {
     & > h3 {
         font-size: 13px;
     }
+}
+
+#spotify-search-bar {
+    margin-top: 30px;
+    outline: none;
+    width: 300px;
+    aspect-ratio: 15 / 1;
+    font-size: 20px;
+    padding: 12px;
+    border: 1px solid var(--color-1);
+    border-radius: 25px;
+    background-color: var(--color-5);
+    color: var(--color-3);
 }

@@ -85,6 +85,9 @@ const displaySpotify = (data: {token: string}) => {
             switch(element.id){
                 case "spotify-sidebar-button-home":
                     openPageHome();
+                    break;
+                case "spotify-sidebar-button-search":
+                    openPageSearch();
             }
 
             currentlySelected = element;
@@ -151,6 +154,8 @@ const spotifyRecommendationPopulate = () => {
                 div.style.overflow = "hidden";
 
                 let backgroundDiv = document.createElement("div");
+
+                backgroundDiv.classList.add("spotify-background-div");
 
                 backgroundDiv.style.backgroundImage = `url(${item.album.images[0].url})`;
                 backgroundDiv.style.backgroundSize = "cover";
@@ -256,6 +261,8 @@ const spotifyRecommendationPopulate = () => {
 
                 let backgroundDiv = document.createElement("div");
 
+                backgroundDiv.classList.add("spotify-background-div");
+
                 backgroundDiv.style.backgroundImage = `url(${item.images[0].url})`;
                 backgroundDiv.style.backgroundSize = "cover";
                 backgroundDiv.style.backgroundPosition = "center";
@@ -293,8 +300,6 @@ const spotifyRecommendationPopulate = () => {
                 topArtists.push(div);
             });
 
-            console.log(topArtists);
-
             topArtists = moveLastToFirst(topArtists);
 
             let list = document.querySelector("#spotify-recommendation-artists > .spotify-recommendation-list") as HTMLElement;
@@ -312,7 +317,6 @@ const spotifyRecommendationPopulate = () => {
                     track.children[1].children[0].innerHTML = `${index}.`;
                     track.classList.add("spotify-recommendation-item-hidden", `spotify-recommendation-item-${index}`);
                 }
-                console.log(track.children[1].children[0].innerHTML)
                 list.appendChild(track);
             });
 
@@ -345,4 +349,163 @@ const spotifyRecommendationPopulate = () => {
                 }
             });
         })
+}
+
+const openPageSearch = () => {
+    let spotifyCenter = document.querySelector("#spotify-center") as HTMLElement;
+
+    spotifyCenter.innerHTML = `
+        <input type="text" id="spotify-search-bar" placeholder="Search..." autocomplete="off">
+        <div class="spotify-search-results" id="spotify-search-results-tracks">
+        
+        </div>
+        <div class="spotify-search-results" id="spotify-search-results-albums">
+        
+        </div>
+        <div class="spotify-search-results" id="spotify-search-results-artists">
+        
+        </div>
+        <div class="spotify-search-results" id="spotify-search-results-playlists">
+        
+        </div>
+        <div class="spotify-search-results" id="spotify-search-results-episodes">
+        
+        </div>
+    `;
+
+    let searchBar = document.querySelector("#spotify-search-bar") as HTMLInputElement;
+
+    searchBar.addEventListener("input", displaySearchResults);
+}
+
+const displaySearchResults = (e) => {
+    let tracks = document.querySelector("#spotify-search-results-tracks") as HTMLElement;
+    let albums = document.querySelector("#spotify-search-results-albums") as HTMLElement;
+    let artists = document.querySelector("#spotify-search-results-artists") as HTMLElement;
+    let playlists = document.querySelector("#spotify-search-results-playlists") as HTMLElement;
+    let episodes = document.querySelector("#spotify-search-results-episodes") as HTMLElement;
+
+    let value = e.target.value;
+    if(value === ""){
+        tracks.innerHTML = "";
+        albums.innerHTML = "";
+        artists.innerHTML = "";
+        playlists.innerHTML = "";
+        episodes.innerHTML = "";
+    }else{
+        fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(value)}&type=album%2Cartist%2Cplaylist%2Ctrack%2Cepisode`, {
+            headers: {
+                "Authorization": `Bearer ${authTokenSpotify}`,
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                populateTracksSearch(data.tracks);
+            });
+    }
+}
+
+const populateTracksSearch = (tracks: {
+    items: any[]
+}) => {
+    let tracksContainer = document.querySelector("#spotify-search-results-tracks") as HTMLElement;
+
+    let tracksDivs: HTMLElement[] = [];
+
+    tracks.items.forEach(track => {
+       let div = document.createElement("div");
+       div.classList.add("spotify-search-item");
+
+        div.style.position = "relative";
+        div.style.overflow = "hidden";
+
+        let backgroundDiv = document.createElement("div");
+
+        backgroundDiv.classList.add("spotify-background-div");
+
+        backgroundDiv.style.backgroundImage = `url(${track.album.images[0].url})`;
+        backgroundDiv.style.backgroundSize = "cover";
+        backgroundDiv.style.backgroundPosition = "center";
+        backgroundDiv.style.filter = "blur(8px)";
+
+        backgroundDiv.style.position = "absolute";
+        backgroundDiv.style.top = "-10px";
+        backgroundDiv.style.left = "-10px";
+        backgroundDiv.style.right = "-10px";
+        backgroundDiv.style.bottom = "-10px";
+        backgroundDiv.style.zIndex = "0";
+
+        backgroundDiv.style.opacity = "0.7";
+
+        div.appendChild(backgroundDiv);
+
+        let contentContainer = document.createElement("div");
+        contentContainer.classList.add("spotify-content-container");
+        contentContainer.style.position = "relative";
+        contentContainer.style.zIndex = "1";
+        contentContainer.style.padding = "10px";
+        contentContainer.style.display = "flex";
+        contentContainer.style.flexDirection = "column";
+        contentContainer.style.alignItems = "center";
+        contentContainer.style.justifyContent = "center";
+
+        contentContainer.innerHTML = `
+            <h1></h1>
+            <h2>${track.name}</h2>
+            <h3>${track.artists[0].name}</h3>    
+        `;
+
+        div.appendChild(contentContainer);
+
+        tracksDivs.push(div);
+    });
+
+    tracksDivs = moveLastToFirst(tracksDivs);
+
+    tracksContainer.innerHTML = `
+        <h5>Tracks (results: ${tracksDivs.length})</h5>
+        <div class="spotify-search-result-list"></div>
+    `;
+
+    let list = document.querySelector("#spotify-search-results-tracks > .spotify-search-result-list") as HTMLElement;
+
+    list.innerHTML = "<span id='spotify-search-tracks-left' class=\"material-symbols-outlined\">chevron_left</span>";
+
+    tracksDivs.forEach((trackElement: HTMLElement, index: number) => {
+        if(index > 0 && index < 4){
+            trackElement.classList.add(`spotify-search-tracks-item-${index}`);
+        }else{
+            trackElement.classList.add("spotify-search-item-hidden", `spotify-search-tracks-item-${index}`);
+        }
+        list.appendChild(trackElement);
+    });
+
+    list.innerHTML += "<span id='spotify-search-tracks-right' class=\"material-symbols-outlined\">chevron_right</span>";
+
+    let left = document.querySelector("#spotify-search-tracks-left") as HTMLElement;
+    let right = document.querySelector("#spotify-search-tracks-right") as HTMLElement;
+
+    right.addEventListener("click", () => {
+        if(!clicked) {
+            clicked = true;
+            list.children[2].classList.add("spotify-search-item-hidden");
+            list.children[5].classList.remove("spotify-search-item-hidden");
+            list.insertBefore(list.children[1], list.children[list.children.length - 1]);
+            setTimeout(() => {
+                clicked = false;
+            }, 300)
+        }
+    });
+
+    left.addEventListener("click", () => {
+        if(!clicked){
+            clicked = true;
+            list.children[5].classList.add("spotify-search-item-hidden");
+            list.children[2].classList.remove("spotify-search-item-hidden");
+            list.insertBefore(list.children[list.children.length - 2], list.children[2]);
+            setTimeout(() => {
+                clicked = false;
+            }, 300)
+        }
+    });
 }
