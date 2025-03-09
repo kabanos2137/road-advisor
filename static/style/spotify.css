@@ -110,3 +110,94 @@ footer.spotify {
         transform: scale(0.9);
     }
 }
+
+#spotify-center {
+    height: 100%;
+    width: calc(100% - 30px);
+
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+    overflow-y: scroll;
+
+    scrollbar-color: var(--color-5) var(--color-3);
+    scrollbar-width: thin;
+}
+
+.spotify-recommendation {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+
+    width: auto;
+
+    & > h1 {
+        margin-top: 30px;
+        width: 100%;
+        text-align: left;
+    }
+
+    & > h5 {
+        font-size: 20px;
+        font-weight: bold;
+        width: 100%;
+        text-align: left;
+    }
+}
+
+.spotify-recommendation-list {
+    height: 200px;
+    width: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+
+    & > span {
+        font-size: 35px;
+    }
+
+    & > .spotify-recommendation-item {
+        transition: height 0.3s, width 0.3s, margin 0.3s;
+
+        margin-left: 25px;
+        margin-right: 25px;
+        height: 100%;
+        aspect-ratio: 3 / 2;
+        border-radius: 15px;
+
+        &.spotify-recommendation-item-hidden {
+            & > .spotify-content-container > * {
+                font-size: 0;
+            }
+
+            margin-left: 0;
+            margin-right: 0;
+            height: 0;
+        }
+    }
+}
+
+.spotify-content-container {
+    height: 100%;
+
+    & > * {
+        transition: font-size 0.3s;
+        -webkit-text-stroke: 1px var(--color-1);
+        text-align: center;
+    }
+
+    & > h1 {
+        font-size: 19px;
+    }
+
+    & > h2 {
+        font-size: 16px;
+    }
+
+    & > h3 {
+        font-size: 13px;
+    }
+}
