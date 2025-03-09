@@ -55,7 +55,7 @@ app.get("/", (_: Request, res: Response) => { //Index.html
 });
 
 app.get("/login", (_: Request, res: Response) => {
-   const scopes = ['user-read-private', 'user-read-email', 'user-read-currently-playing', 'user-read-playback-state', 'user-read-recently-played', 'user-top-read', "playlist-read-private", "playlist-read-collaborative"];
+   const scopes = ['user-read-private', 'user-read-email', 'user-read-currently-playing', 'user-read-playback-state', 'user-read-recently-played', 'user-top-read', "playlist-read-private", "playlist-read-collaborative", "playlist-modify-public", "playlist-modify-private"];
    const authUrl = spotifyApi.createAuthorizeURL(scopes, '');
    res.redirect(authUrl);
 });

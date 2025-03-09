@@ -170,11 +170,19 @@ footer.spotify {
 
         & > .spotify-background-div {
             transition: filter 0.3s;
+
+            &.spotify-background-div-no-image {
+                transition: background-color 0.3s;
+            }
         }
 
         &:not(.spotify-recommendation-item-hidden):hover, &:not(.spotify-search-item-hidden):hover{
             & > .spotify-background-div{
                 filter: blur(0) !important;
+
+                &.spotify-background-div-no-image {
+                    background-color: var(--color-10) !important;
+                }
             }
         }
 
