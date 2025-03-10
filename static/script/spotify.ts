@@ -561,7 +561,7 @@ const openPageFavorite = () => {
                 <span class="material-symbols-outlined">chevron_right</span>
             </div>
         </div>
-        <div class="spotify-favorites" id="spotify-favorite-saved">
+        <div class="spotify-favorites" id="spotify-favorite-saved" style="margin-bottom: 30px;">
             <h5>Saved</h5>
             <div class="spotify-favorites-list">
                 <div class="spotify-favorites-item"></div>
