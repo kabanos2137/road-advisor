@@ -172,28 +172,11 @@ const spotifyRecommendationPopulate = () => {
                     backgroundDiv.style.backgroundColor = "var(--color-9)"
                 }
 
-                backgroundDiv.style.filter = "blur(8px)";
-
-                backgroundDiv.style.position = "absolute";
-                backgroundDiv.style.top = "-10px";
-                backgroundDiv.style.left = "-10px";
-                backgroundDiv.style.right = "-10px";
-                backgroundDiv.style.bottom = "-10px";
-                backgroundDiv.style.zIndex = "0";
-
-                backgroundDiv.style.opacity = "0.7";
+                backgroundDiv = replaceBackgroundDiv(backgroundDiv);
 
                 div.appendChild(backgroundDiv);
 
-                let contentContainer = document.createElement("div");
-                contentContainer.classList.add("spotify-content-container");
-                contentContainer.style.position = "relative";
-                contentContainer.style.zIndex = "1";
-                contentContainer.style.padding = "10px";
-                contentContainer.style.display = "flex";
-                contentContainer.style.flexDirection = "column";
-                contentContainer.style.alignItems = "center";
-                contentContainer.style.justifyContent = "center";
+                let contentContainer = getContentContainer()
 
                 contentContainer.innerHTML = `
                     <h1>${index + 1}.</h1>
@@ -282,28 +265,11 @@ const spotifyRecommendationPopulate = () => {
                     backgroundDiv.style.backgroundColor = "var(--color-9)"
                 }
 
-                backgroundDiv.style.filter = "blur(8px)";
-
-                backgroundDiv.style.position = "absolute";
-                backgroundDiv.style.top = "-10px";
-                backgroundDiv.style.left = "-10px";
-                backgroundDiv.style.right = "-10px";
-                backgroundDiv.style.bottom = "-10px";
-                backgroundDiv.style.zIndex = "0";
-
-                backgroundDiv.style.opacity = "0.7";
+                backgroundDiv = replaceBackgroundDiv(backgroundDiv);
 
                 div.appendChild(backgroundDiv);
 
-                let contentContainer = document.createElement("div");
-                contentContainer.classList.add("spotify-content-container");
-                contentContainer.style.position = "relative";
-                contentContainer.style.zIndex = "1";
-                contentContainer.style.padding = "10px";
-                contentContainer.style.display = "flex";
-                contentContainer.style.flexDirection = "column";
-                contentContainer.style.alignItems = "center";
-                contentContainer.style.justifyContent = "center";
+                let contentContainer = getContentContainer()
 
                 contentContainer.innerHTML = `
                     <h1>${index + 1}.</h1>
@@ -466,28 +432,11 @@ const populateSearch = (type: string, data: any) => {
             }
         }
 
-        backgroundDiv.style.filter = "blur(8px)";
-
-        backgroundDiv.style.position = "absolute";
-        backgroundDiv.style.top = "-10px";
-        backgroundDiv.style.left = "-10px";
-        backgroundDiv.style.right = "-10px";
-        backgroundDiv.style.bottom = "-10px";
-        backgroundDiv.style.zIndex = "0";
-
-        backgroundDiv.style.opacity = "0.7";
+        backgroundDiv = replaceBackgroundDiv(backgroundDiv);
 
         div.appendChild(backgroundDiv);
 
-        let contentContainer = document.createElement("div");
-        contentContainer.classList.add("spotify-content-container");
-        contentContainer.style.position = "relative";
-        contentContainer.style.zIndex = "1";
-        contentContainer.style.padding = "10px";
-        contentContainer.style.display = "flex";
-        contentContainer.style.flexDirection = "column";
-        contentContainer.style.alignItems = "center";
-        contentContainer.style.justifyContent = "center";
+        let contentContainer = getContentContainer()
 
         if(type === "track" || type === "album"){
             contentContainer.innerHTML = `
@@ -642,28 +591,12 @@ const populateSaved = () => {
 
         backgroundDiv.style.backgroundSize = "cover";
         backgroundDiv.style.backgroundPosition = "center";
-        backgroundDiv.style.filter = "blur(8px)";
 
-        backgroundDiv.style.position = "absolute";
-        backgroundDiv.style.top = "-10px";
-        backgroundDiv.style.left = "-10px";
-        backgroundDiv.style.right = "-10px";
-        backgroundDiv.style.bottom = "-10px";
-        backgroundDiv.style.zIndex = "0";
-
-        backgroundDiv.style.opacity = "0.7";
+        backgroundDiv = replaceBackgroundDiv(backgroundDiv);
 
         div.appendChild(backgroundDiv);
 
-        let contentContainer = document.createElement("div");
-        contentContainer.classList.add("spotify-content-container");
-        contentContainer.style.position = "relative";
-        contentContainer.style.zIndex = "1";
-        contentContainer.style.padding = "10px";
-        contentContainer.style.display = "flex";
-        contentContainer.style.flexDirection = "column";
-        contentContainer.style.alignItems = "center";
-        contentContainer.style.justifyContent = "center";
+        let contentContainer = getContentContainer()
 
         if(index === 0){
             contentContainer.innerHTML = `
@@ -724,28 +657,11 @@ const populatePlaylists = () => {
                     backgroundDiv.style.backgroundColor = "var(--color-9)"
                 }
 
-                backgroundDiv.style.filter = "blur(8px)";
-
-                backgroundDiv.style.position = "absolute";
-                backgroundDiv.style.top = "-10px";
-                backgroundDiv.style.left = "-10px";
-                backgroundDiv.style.right = "-10px";
-                backgroundDiv.style.bottom = "-10px";
-                backgroundDiv.style.zIndex = "0";
-
-                backgroundDiv.style.opacity = "0.7";
+                backgroundDiv = replaceBackgroundDiv(backgroundDiv);
 
                 element.appendChild(backgroundDiv);
 
-                let contentContainer = document.createElement("div");
-                contentContainer.classList.add("spotify-content-container");
-                contentContainer.style.position = "relative";
-                contentContainer.style.zIndex = "1";
-                contentContainer.style.padding = "10px";
-                contentContainer.style.display = "flex";
-                contentContainer.style.flexDirection = "column";
-                contentContainer.style.alignItems = "center";
-                contentContainer.style.justifyContent = "center";
+                let contentContainer = getContentContainer()
 
                 if(item){
                     g_index++;
@@ -841,28 +757,11 @@ const populatePlaylists = () => {
                                                 backgroundDiv.style.backgroundColor = "var(--color-9)"
                                             }
 
-                                            backgroundDiv.style.filter = "blur(8px)";
-
-                                            backgroundDiv.style.position = "absolute";
-                                            backgroundDiv.style.top = "-10px";
-                                            backgroundDiv.style.left = "-10px";
-                                            backgroundDiv.style.right = "-10px";
-                                            backgroundDiv.style.bottom = "-10px";
-                                            backgroundDiv.style.zIndex = "0";
-
-                                            backgroundDiv.style.opacity = "0.7";
+                                            backgroundDiv = replaceBackgroundDiv(backgroundDiv);
 
                                             element.appendChild(backgroundDiv);
 
-                                            let contentContainer = document.createElement("div");
-                                            contentContainer.classList.add("spotify-content-container");
-                                            contentContainer.style.position = "relative";
-                                            contentContainer.style.zIndex = "1";
-                                            contentContainer.style.padding = "10px";
-                                            contentContainer.style.display = "flex";
-                                            contentContainer.style.flexDirection = "column";
-                                            contentContainer.style.alignItems = "center";
-                                            contentContainer.style.justifyContent = "center";
+                                            let contentContainer = getContentContainer()
 
                                             if (item) {
                                                 g_index++;
@@ -939,28 +838,11 @@ const populatePlaylists = () => {
                                                 backgroundDiv.style.backgroundColor = "var(--color-9)"
                                             }
 
-                                            backgroundDiv.style.filter = "blur(8px)";
-
-                                            backgroundDiv.style.position = "absolute";
-                                            backgroundDiv.style.top = "-10px";
-                                            backgroundDiv.style.left = "-10px";
-                                            backgroundDiv.style.right = "-10px";
-                                            backgroundDiv.style.bottom = "-10px";
-                                            backgroundDiv.style.zIndex = "0";
-
-                                            backgroundDiv.style.opacity = "0.7";
+                                            backgroundDiv = replaceBackgroundDiv(backgroundDiv);
 
                                             element.appendChild(backgroundDiv);
 
-                                            let contentContainer = document.createElement("div");
-                                            contentContainer.classList.add("spotify-content-container");
-                                            contentContainer.style.position = "relative";
-                                            contentContainer.style.zIndex = "1";
-                                            contentContainer.style.padding = "10px";
-                                            contentContainer.style.display = "flex";
-                                            contentContainer.style.flexDirection = "column";
-                                            contentContainer.style.alignItems = "center";
-                                            contentContainer.style.justifyContent = "center";
+                                            let contentContainer = getContentContainer()
 
                                             if (item) {
                                                 g_index++;
@@ -1035,28 +917,11 @@ const getEndPlaylists = async (divs: HTMLElement[], nullStart: number, nullEnd: 
                 backgroundDiv.style.backgroundColor = "var(--color-9)"
             }
 
-            backgroundDiv.style.filter = "blur(8px)";
-
-            backgroundDiv.style.position = "absolute";
-            backgroundDiv.style.top = "-10px";
-            backgroundDiv.style.left = "-10px";
-            backgroundDiv.style.right = "-10px";
-            backgroundDiv.style.bottom = "-10px";
-            backgroundDiv.style.zIndex = "0";
-
-            backgroundDiv.style.opacity = "0.7";
+            backgroundDiv = replaceBackgroundDiv(backgroundDiv);
 
             element.appendChild(backgroundDiv);
 
-            let contentContainer = document.createElement("div");
-            contentContainer.classList.add("spotify-content-container");
-            contentContainer.style.position = "relative";
-            contentContainer.style.zIndex = "1";
-            contentContainer.style.padding = "10px";
-            contentContainer.style.display = "flex";
-            contentContainer.style.flexDirection = "column";
-            contentContainer.style.alignItems = "center";
-            contentContainer.style.justifyContent = "center";
+            let contentContainer = getContentContainer()
 
             if (item) {
                 g_index++;
@@ -1081,4 +946,31 @@ const getEndPlaylists = async (divs: HTMLElement[], nullStart: number, nullEnd: 
         nullEnd,
         divs
     }
+}
+
+const getContentContainer = () => {
+    let div = document.createElement("div");
+    div.classList.add("spotify-content-container");
+    div.style.position = "relative";
+    div.style.zIndex = "1";
+    div.style.padding = "10px";
+    div.style.display = "flex";
+    div.style.flexDirection = "column";
+    div.style.alignItems = "center";
+    div.style.justifyContent = "center";
+    return div;
+}
+
+const replaceBackgroundDiv = (backgroundDiv) => {
+    backgroundDiv.style.filter = "blur(8px)";
+
+    backgroundDiv.style.position = "absolute";
+    backgroundDiv.style.top = "-10px";
+    backgroundDiv.style.left = "-10px";
+    backgroundDiv.style.right = "-10px";
+    backgroundDiv.style.bottom = "-10px";
+    backgroundDiv.style.zIndex = "0";
+
+    backgroundDiv.style.opacity = "0.7";
+    return backgroundDiv
 }
