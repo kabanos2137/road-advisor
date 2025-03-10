@@ -1,5 +1,7 @@
 let authTokenSpotify: string | null = null;
 
+let g_index = 0;
+
 let main = document.querySelector("main") as HTMLElement;
 let nav = document.querySelector("nav") as HTMLElement;
 let footer = document.querySelector("footer") as HTMLElement;
@@ -148,7 +150,6 @@ const spotifyRecommendationPopulate = () => {
     })
         .then(res => res.json())
         .then(data => {
-            console.log(data);
             let topTracks: HTMLElement[] = [];
 
             data.items.forEach((item: any, index: number) => {
@@ -211,43 +212,47 @@ const spotifyRecommendationPopulate = () => {
 
             let list = document.querySelector("#spotify-recommendation-tracks > .spotify-recommendation-list") as HTMLElement;
 
-            list.innerHTML = "<span id='spotify-recommendation-tracks-left' class=\"material-symbols-outlined\">chevron_left</span>";
+            if(data.items && data.items.length > 0){
+                list.innerHTML = "<span id='spotify-recommendation-tracks-left' class=\"material-symbols-outlined\">chevron_left</span>";
 
-            topTracks.forEach((track: HTMLElement, index: number) => {
-                if(index == 0 || index > 3){
-                    track.classList.add("spotify-recommendation-item-hidden");
-                }
-                list.appendChild(track);
-            });
+                topTracks.forEach((track: HTMLElement, index: number) => {
+                    if(index == 0 || index > 3){
+                        track.classList.add("spotify-recommendation-item-hidden");
+                    }
+                    list.appendChild(track);
+                });
 
-            list.innerHTML += "<span id='spotify-recommendation-tracks-right' class=\"material-symbols-outlined\">chevron_right</span>";
+                list.innerHTML += "<span id='spotify-recommendation-tracks-right' class=\"material-symbols-outlined\">chevron_right</span>";
 
-            let left = document.querySelector("#spotify-recommendation-tracks-left") as HTMLElement;
-            let right = document.querySelector("#spotify-recommendation-tracks-right") as HTMLElement;
+                let left = document.querySelector("#spotify-recommendation-tracks-left") as HTMLElement;
+                let right = document.querySelector("#spotify-recommendation-tracks-right") as HTMLElement;
 
-            right.addEventListener("click", () => {
-                if(!clicked) {
-                    clicked = true;
-                    list.children[2].classList.add("spotify-recommendation-item-hidden");
-                    list.children[5].classList.remove("spotify-recommendation-item-hidden");
-                    list.insertBefore(list.children[1], list.children[list.children.length - 1]);
-                    setTimeout(() => {
-                        clicked = false;
-                    }, 300)
-                }
-            });
+                right.addEventListener("click", () => {
+                    if(!clicked) {
+                        clicked = true;
+                        list.children[2].classList.add("spotify-recommendation-item-hidden");
+                        list.children[5].classList.remove("spotify-recommendation-item-hidden");
+                        list.insertBefore(list.children[1], list.children[list.children.length - 1]);
+                        setTimeout(() => {
+                            clicked = false;
+                        }, 300)
+                    }
+                });
 
-            left.addEventListener("click", () => {
-                if(!clicked){
-                    clicked = true;
-                    list.children[4].classList.add("spotify-recommendation-item-hidden");
-                    list.children[1].classList.remove("spotify-recommendation-item-hidden");
-                    list.insertBefore(list.children[list.children.length - 2], list.children[1]);
-                    setTimeout(() => {
-                        clicked = false;
-                    }, 300)
-                }
-            });
+                left.addEventListener("click", () => {
+                    if(!clicked){
+                        clicked = true;
+                        list.children[4].classList.add("spotify-recommendation-item-hidden");
+                        list.children[1].classList.remove("spotify-recommendation-item-hidden");
+                        list.insertBefore(list.children[list.children.length - 2], list.children[1]);
+                        setTimeout(() => {
+                            clicked = false;
+                        }, 300)
+                    }
+                });
+            } else {
+               list.innerHTML = "";
+            }
         });
     fetch("https://api.spotify.com/v1/me/top/artists", {
         headers: {
@@ -256,7 +261,6 @@ const spotifyRecommendationPopulate = () => {
     })
         .then(res => res.json())
         .then(data => {
-            console.log(data);
             let topArtists: HTMLElement[] = [];
             data.items.forEach((item: any, index: number) => {
                 let div = document.createElement("div");
@@ -317,43 +321,47 @@ const spotifyRecommendationPopulate = () => {
 
             let list = document.querySelector("#spotify-recommendation-artists > .spotify-recommendation-list") as HTMLElement;
 
-            list.innerHTML = "<span id='spotify-recommendation-artists-left' class=\"material-symbols-outlined\">chevron_left</span>";
+            if(data.items && data.items.length > 0){
+                list.innerHTML = "<span id='spotify-recommendation-artists-left' class=\"material-symbols-outlined\">chevron_left</span>";
 
-            topArtists.forEach((track: HTMLElement, index: number) => {
-                if(index == 0 || index > 3){
-                    track.classList.add("spotify-recommendation-item-hidden");
-                }
-                list.appendChild(track);
-            });
+                topArtists.forEach((track: HTMLElement, index: number) => {
+                    if(index == 0 || index > 3){
+                        track.classList.add("spotify-recommendation-item-hidden");
+                    }
+                    list.appendChild(track);
+                });
 
-            list.innerHTML += "<span id='spotify-recommendation-artists-right' class=\"material-symbols-outlined\">chevron_right</span>";
+                list.innerHTML += "<span id='spotify-recommendation-artists-right' class=\"material-symbols-outlined\">chevron_right</span>";
 
-            let left = document.querySelector("#spotify-recommendation-artists-left") as HTMLElement;
-            let right = document.querySelector("#spotify-recommendation-artists-right") as HTMLElement;
+                let left = document.querySelector("#spotify-recommendation-artists-left") as HTMLElement;
+                let right = document.querySelector("#spotify-recommendation-artists-right") as HTMLElement;
 
-            right.addEventListener("click", () => {
-                if(!clicked) {
-                    clicked = true;
-                    list.children[2].classList.add("spotify-recommendation-item-hidden");
-                    list.children[5].classList.remove("spotify-recommendation-item-hidden");
-                    list.insertBefore(list.children[1], list.children[list.children.length - 1]);
-                    setTimeout(() => {
-                        clicked = false;
-                    }, 300)
-                }
-            });
+                right.addEventListener("click", () => {
+                    if(!clicked) {
+                        clicked = true;
+                        list.children[2].classList.add("spotify-recommendation-item-hidden");
+                        list.children[5].classList.remove("spotify-recommendation-item-hidden");
+                        list.insertBefore(list.children[1], list.children[list.children.length - 1]);
+                        setTimeout(() => {
+                            clicked = false;
+                        }, 300)
+                    }
+                });
 
-            left.addEventListener("click", () => {
-                if(!clicked){
-                    clicked = true;
-                    list.children[4].classList.add("spotify-recommendation-item-hidden");
-                    list.children[1].classList.remove("spotify-recommendation-item-hidden");
-                    list.insertBefore(list.children[list.children.length - 2], list.children[1]);
-                    setTimeout(() => {
-                        clicked = false;
-                    }, 300)
-                }
-            });
+                left.addEventListener("click", () => {
+                    if(!clicked){
+                        clicked = true;
+                        list.children[4].classList.add("spotify-recommendation-item-hidden");
+                        list.children[1].classList.remove("spotify-recommendation-item-hidden");
+                        list.insertBefore(list.children[list.children.length - 2], list.children[1]);
+                        setTimeout(() => {
+                            clicked = false;
+                        }, 300)
+                    }
+                });
+            } else {
+                list.innerHTML = '';
+            }
         })
 }
 
@@ -387,7 +395,8 @@ const openPageSearch = () => {
     searchBar.addEventListener("input", displaySearchResults);
 }
 
-const displaySearchResults = (e) => {
+const displaySearchResults = () => {
+    let searchBar = document.querySelector("#spotify-search-bar") as HTMLInputElement;
     let tracks = document.querySelector("#spotify-search-results-tracks") as HTMLElement;
     let albums = document.querySelector("#spotify-search-results-albums") as HTMLElement;
     let artists = document.querySelector("#spotify-search-results-artists") as HTMLElement;
@@ -395,7 +404,7 @@ const displaySearchResults = (e) => {
     let shows = document.querySelector("#spotify-search-results-shows") as HTMLElement;
     let episodes = document.querySelector("#spotify-search-results-episodes") as HTMLElement;
 
-    let value = e.target.value;
+    let value = searchBar.value;
     if(value === ""){
         tracks.innerHTML = "";
         albums.innerHTML = "";
@@ -421,12 +430,12 @@ const displaySearchResults = (e) => {
     }
 }
 
-const populateSearch = (type, data) => {
+const populateSearch = (type: string, data: any) => {
     let container = document.querySelector(`#spotify-search-results-${type}s`) as HTMLElement;
 
     let divs: HTMLElement[] = [];
 
-    data.items.filter(element => element !== null).forEach(item => {
+    data.items.filter((element: any) => element !== null).forEach((item: any) => {
         let div = document.createElement("div");
         div.classList.add("spotify-search-item");
 
@@ -592,6 +601,484 @@ const openPageFavorite = () => {
     let spotifyCenter = document.querySelector("#spotify-center") as HTMLElement;
 
     spotifyCenter.innerHTML = `
-        
+        <div class="spotify-favorites" id="spotify-favorite-playlists">
+            <h1>Your favorite</h1>
+            <h5>Your playlists</h5>
+            <div class="spotify-favorites-list">
+                <span class="material-symbols-outlined">chevron_left</span>
+                <div class="spotify-favorites-item"></div>
+                <div class="spotify-favorites-item"></div>
+                <div class="spotify-favorites-item"></div>
+                <span class="material-symbols-outlined">chevron_right</span>
+            </div>
+        </div>
+        <div class="spotify-favorites" id="spotify-favorite-saved">
+            <h5>Saved</h5>
+            <div class="spotify-favorites-list">
+                <div class="spotify-favorites-item"></div>
+                <div class="spotify-favorites-item"></div>
+            </div>
+        </div>
     `;
+    populateSaved();
+    populatePlaylists();
+}
+
+const populateSaved = () => {
+    let list = document.querySelector(`#spotify-favorite-saved > .spotify-favorites-list`) as HTMLElement;
+    (Array.from(list.children) as HTMLElement[]).forEach((div: HTMLElement, index: number) => {
+        div.style.position = "relative";
+        div.style.overflow = "hidden";
+
+        let backgroundDiv = document.createElement("div");
+
+        backgroundDiv.classList.add("spotify-background-div");
+
+        if(index === 0){
+            backgroundDiv.style.backgroundImage = `url(../images/saved-songs.png)`;
+        }else{
+            backgroundDiv.style.backgroundImage = `url(../images/saved-episodes.png)`;
+        }
+
+        backgroundDiv.style.backgroundSize = "cover";
+        backgroundDiv.style.backgroundPosition = "center";
+        backgroundDiv.style.filter = "blur(8px)";
+
+        backgroundDiv.style.position = "absolute";
+        backgroundDiv.style.top = "-10px";
+        backgroundDiv.style.left = "-10px";
+        backgroundDiv.style.right = "-10px";
+        backgroundDiv.style.bottom = "-10px";
+        backgroundDiv.style.zIndex = "0";
+
+        backgroundDiv.style.opacity = "0.7";
+
+        div.appendChild(backgroundDiv);
+
+        let contentContainer = document.createElement("div");
+        contentContainer.classList.add("spotify-content-container");
+        contentContainer.style.position = "relative";
+        contentContainer.style.zIndex = "1";
+        contentContainer.style.padding = "10px";
+        contentContainer.style.display = "flex";
+        contentContainer.style.flexDirection = "column";
+        contentContainer.style.alignItems = "center";
+        contentContainer.style.justifyContent = "center";
+
+        if(index === 0){
+            contentContainer.innerHTML = `
+                <h1>Saved Songs</h1>
+            `;
+        } else {
+            contentContainer.innerHTML = `
+                <h1>Saved Episodes</h1>
+            `;
+        }
+
+        div.appendChild(contentContainer);
+    });
+}
+
+const populatePlaylists = () => {
+    fetch("https://api.spotify.com/v1/me/playlists?limit=50&offset=0", {
+        headers: {
+            "Authorization": `Bearer ${authTokenSpotify}`,
+        }
+    })
+        .then(res => res.json())
+        .then(data => {
+            data.total = data.total - 1; //Fixes obvious spotify API bug 🙄. IT'S SO FUCKING ANNOYING!!!!!!!
+
+            let list = document.querySelector(`#spotify-favorite-playlists > .spotify-favorites-list`) as HTMLElement;
+            let divs: HTMLElement[] = [];
+            let nullStart = 0;//index of first null element
+            let nullEnd = data.total; //index of last null element
+
+            for(let i = 0; i < data.total; i++) {
+                divs.push(document.createElement("div"));
+            }
+
+            divs.forEach((element: HTMLElement, index: number) => {
+                let item = data.items[index];
+                element.classList.add("spotify-favorites-item");
+
+                element.style.position = "relative";
+                element.style.overflow = "hidden";
+
+                if(!item){
+                    element.classList.add("spotify-empty")
+                }else{
+                    nullStart++;
+                }
+
+                let backgroundDiv = document.createElement("div");
+
+                backgroundDiv.classList.add("spotify-background-div");
+
+                if(item && item.images && item.images.length > 0 && item.images[0].url){
+                    backgroundDiv.style.backgroundImage = `url(${item.images[0].url})`;
+                    backgroundDiv.style.backgroundSize = "cover";
+                    backgroundDiv.style.backgroundPosition = "center";
+                }else{
+                    backgroundDiv.classList.add("spotify-background-div-no-image");
+                    backgroundDiv.style.backgroundColor = "var(--color-9)"
+                }
+
+                backgroundDiv.style.filter = "blur(8px)";
+
+                backgroundDiv.style.position = "absolute";
+                backgroundDiv.style.top = "-10px";
+                backgroundDiv.style.left = "-10px";
+                backgroundDiv.style.right = "-10px";
+                backgroundDiv.style.bottom = "-10px";
+                backgroundDiv.style.zIndex = "0";
+
+                backgroundDiv.style.opacity = "0.7";
+
+                element.appendChild(backgroundDiv);
+
+                let contentContainer = document.createElement("div");
+                contentContainer.classList.add("spotify-content-container");
+                contentContainer.style.position = "relative";
+                contentContainer.style.zIndex = "1";
+                contentContainer.style.padding = "10px";
+                contentContainer.style.display = "flex";
+                contentContainer.style.flexDirection = "column";
+                contentContainer.style.alignItems = "center";
+                contentContainer.style.justifyContent = "center";
+
+                if(item){
+                    g_index++;
+                    contentContainer.innerHTML = `
+                        <h1>${item.name}</h1>
+                        <h2>${item.owner.display_name}</h2>    
+                    `;
+                }else{
+                    contentContainer.innerHTML = `
+                        <h1></h1>
+                        <h2></h2>    
+                    `;
+                }
+
+                element.appendChild(contentContainer);
+
+                divs[index] = element;
+            });
+
+            getEndPlaylists(divs, nullStart, nullEnd, data).then((data: any) => {
+                let newDivs = data.divs
+                nullEnd = data.nullEnd;
+                divs = moveLastToFirst(newDivs);
+                list.innerHTML = "";
+                if(divs.length > 3){
+                    list.innerHTML = `<span id='spotify-favorites-left' class=\"material-symbols-outlined\">chevron_left</span>`;
+                }
+
+                divs.forEach((element: HTMLElement, index: number) => {
+                    if(divs.length > 3){
+                        if(index < 1 || index > 3){
+                            element.classList.add("spotify-favorites-item-hidden");
+                        }
+                    }
+
+                    element.id = `spotify-favorites-item-${index}`;
+
+                    list.appendChild(element);
+                });
+
+                if(divs.length > 3){
+                    list.innerHTML += `<span id='spotify-favorites-right' class=\"material-symbols-outlined\">chevron_right</span>`;
+
+                    let left = document.querySelector(`#spotify-favorites-left`) as HTMLElement;
+                    let right = document.querySelector(`#spotify-favorites-right`) as HTMLElement;
+
+                    right.addEventListener("click", () => {
+                        if(!clicked) {
+                            clicked = true;
+                            list.children[2].classList.add("spotify-favorites-item-hidden");
+                            list.children[5].classList.remove("spotify-favorites-item-hidden");
+                            list.insertBefore(list.children[1], list.children[list.children.length - 1]);
+
+                            if(list.children[6] && list.children[6].classList.contains("spotify-empty") && data.total > 100){
+                                let limit = Math.min(document.querySelectorAll("#spotify-favorite-playlists > .spotify-favorites-list > .spotify-empty").length, 50);
+                                let offset = parseInt(list.children[6].id.split("-")[list.children[6].id.split("-").length - 1]);
+
+                                fetch(`https://api.spotify.com/v1/me/playlists?limit=${limit}&offset=${offset}`, {
+                                    headers: {
+                                        "Authorization": `Bearer ${authTokenSpotify}`,
+                                    }
+                                })
+                                    .then(res => res.json())
+                                    .then(data => {
+                                        data.items.forEach((item: any, index: number) => {
+                                            let currentIndex = offset + index;
+                                            let element = divs[currentIndex];
+
+                                            element.classList.add("spotify-favorites-item");
+
+                                            element.style.position = "relative";
+                                            element.style.overflow = "hidden";
+
+                                            if (!item) {
+                                                element.classList.add("spotify-empty")
+                                            } else {
+                                                element.classList.remove("spotify-empty")
+                                                nullStart++;
+                                            }
+
+                                            element.innerHTML = ""
+
+                                            let backgroundDiv = document.createElement("div");
+
+                                            backgroundDiv.classList.add("spotify-background-div");
+
+                                            if (item && item.images && item.images.length > 0 && item.images[0].url) {
+                                                backgroundDiv.style.backgroundImage = `url(${item.images[0].url})`;
+                                                backgroundDiv.style.backgroundSize = "cover";
+                                                backgroundDiv.style.backgroundPosition = "center";
+                                            } else {
+                                                backgroundDiv.classList.add("spotify-background-div-no-image");
+                                                backgroundDiv.style.backgroundColor = "var(--color-9)"
+                                            }
+
+                                            backgroundDiv.style.filter = "blur(8px)";
+
+                                            backgroundDiv.style.position = "absolute";
+                                            backgroundDiv.style.top = "-10px";
+                                            backgroundDiv.style.left = "-10px";
+                                            backgroundDiv.style.right = "-10px";
+                                            backgroundDiv.style.bottom = "-10px";
+                                            backgroundDiv.style.zIndex = "0";
+
+                                            backgroundDiv.style.opacity = "0.7";
+
+                                            element.appendChild(backgroundDiv);
+
+                                            let contentContainer = document.createElement("div");
+                                            contentContainer.classList.add("spotify-content-container");
+                                            contentContainer.style.position = "relative";
+                                            contentContainer.style.zIndex = "1";
+                                            contentContainer.style.padding = "10px";
+                                            contentContainer.style.display = "flex";
+                                            contentContainer.style.flexDirection = "column";
+                                            contentContainer.style.alignItems = "center";
+                                            contentContainer.style.justifyContent = "center";
+
+                                            if (item) {
+                                                g_index++;
+                                                contentContainer.innerHTML = `
+                                                    <h1>${item.name}</h1>
+                                                    <h2>${item.owner.display_name}</h2>    
+                                                `;
+                                            } else {
+                                                contentContainer.innerHTML = `
+                                                    <h1></h1>
+                                                    <h2></h2>    
+                                                `;
+                                            }
+
+                                            element.appendChild(contentContainer);
+
+                                            divs[currentIndex] = element;
+                                        });
+                                    });
+                            }
+
+                            setTimeout(() => {
+                                clicked = false;
+                            }, 300)
+                        }
+                    });
+
+                    left.addEventListener("click", () => {
+                        if(!clicked){
+                            clicked = true;
+                            list.children[4].classList.add("spotify-favorites-item-hidden");
+                            list.children[1].classList.remove("spotify-favorites-item-hidden");
+                            list.insertBefore(list.children[list.children.length - 2], list.children[1]);
+
+                            if(list.children[list.children.length - 3] && list.children[list.children.length - 3].classList.contains("spotify-empty") && data.total > 100){
+                                let limit = Math.min(document.querySelectorAll("#spotify-favorite-playlists > .spotify-favorites-list > .spotify-empty").length, 50);
+                                let offset = parseInt(list.children[list.children.length - 3].id.split("-")[list.children[list.children.length - 3].id.split("-").length - 1]) - limit;
+
+                                fetch(`https://api.spotify.com/v1/me/playlists?limit=${limit}&offset=${offset}`, {
+                                    headers: {
+                                        "Authorization": `Bearer ${authTokenSpotify}`,
+                                    }
+                                })
+                                    .then(res => res.json())
+                                    .then(data => {
+                                        data.items.forEach((item: any, index: number) => {
+                                            let currentIndex = offset + index;
+                                            let element = divs[currentIndex];
+
+                                            element.classList.add("spotify-favorites-item");
+
+                                            element.style.position = "relative";
+                                            element.style.overflow = "hidden";
+
+                                            if (!item) {
+                                                element.classList.add("spotify-empty")
+                                            } else {
+                                                element.classList.remove("spotify-empty")
+                                                nullStart++;
+                                            }
+
+                                            element.innerHTML = ""
+
+                                            let backgroundDiv = document.createElement("div");
+
+                                            backgroundDiv.classList.add("spotify-background-div");
+
+                                            if (item && item.images && item.images.length > 0 && item.images[0].url) {
+                                                backgroundDiv.style.backgroundImage = `url(${item.images[0].url})`;
+                                                backgroundDiv.style.backgroundSize = "cover";
+                                                backgroundDiv.style.backgroundPosition = "center";
+                                            } else {
+                                                backgroundDiv.classList.add("spotify-background-div-no-image");
+                                                backgroundDiv.style.backgroundColor = "var(--color-9)"
+                                            }
+
+                                            backgroundDiv.style.filter = "blur(8px)";
+
+                                            backgroundDiv.style.position = "absolute";
+                                            backgroundDiv.style.top = "-10px";
+                                            backgroundDiv.style.left = "-10px";
+                                            backgroundDiv.style.right = "-10px";
+                                            backgroundDiv.style.bottom = "-10px";
+                                            backgroundDiv.style.zIndex = "0";
+
+                                            backgroundDiv.style.opacity = "0.7";
+
+                                            element.appendChild(backgroundDiv);
+
+                                            let contentContainer = document.createElement("div");
+                                            contentContainer.classList.add("spotify-content-container");
+                                            contentContainer.style.position = "relative";
+                                            contentContainer.style.zIndex = "1";
+                                            contentContainer.style.padding = "10px";
+                                            contentContainer.style.display = "flex";
+                                            contentContainer.style.flexDirection = "column";
+                                            contentContainer.style.alignItems = "center";
+                                            contentContainer.style.justifyContent = "center";
+
+                                            if (item) {
+                                                g_index++;
+                                                contentContainer.innerHTML = `
+                                                    <h1>${item.name}</h1>
+                                                    <h2>${item.owner.display_name}</h2>    
+                                                `;
+                                            } else {
+                                                contentContainer.innerHTML = `
+                                                    <h1></h1>
+                                                    <h2></h2>    
+                                                `;
+                                            }
+
+                                            element.appendChild(contentContainer);
+
+                                            divs[currentIndex] = element;
+                                        });
+                                    });
+                            }
+
+                            setTimeout(() => {
+                                clicked = false;
+                            }, 300);
+                        }
+                    });
+                }
+            });
+        });
+}
+
+const getEndPlaylists = async (divs: HTMLElement[], nullStart: number, nullEnd: number, oldData: any) => {
+    if (oldData.total > 50) {
+        let yetToFind = nullEnd - nullStart + 1;
+        let limit = Math.min(yetToFind, 50);
+        let offset = nullEnd - limit + 1;
+
+        const response = await fetch(`https://api.spotify.com/v1/me/playlists?limit=${limit}&offset=${offset}`, {
+            headers: {
+                "Authorization": `Bearer ${authTokenSpotify}`,
+            }
+        });
+        const data = await response.json();
+        data.items.forEach((item: any, index: number) => {
+            let currentIndex = offset + index - 1;
+            let element = divs[currentIndex];
+
+            element.classList.add("spotify-favorites-item");
+
+            element.style.position = "relative";
+            element.style.overflow = "hidden";
+
+            if (!item) {
+                element.classList.add("spotify-empty")
+            } else {
+                element.classList.remove("spotify-empty")
+                nullEnd--;
+            }
+
+            element.innerHTML = ""
+
+            let backgroundDiv = document.createElement("div");
+
+            backgroundDiv.classList.add("spotify-background-div");
+
+            if (item && item.images && item.images.length > 0 && item.images[0].url) {
+                backgroundDiv.style.backgroundImage = `url(${item.images[0].url})`;
+                backgroundDiv.style.backgroundSize = "cover";
+                backgroundDiv.style.backgroundPosition = "center";
+            } else {
+                backgroundDiv.classList.add("spotify-background-div-no-image");
+                backgroundDiv.style.backgroundColor = "var(--color-9)"
+            }
+
+            backgroundDiv.style.filter = "blur(8px)";
+
+            backgroundDiv.style.position = "absolute";
+            backgroundDiv.style.top = "-10px";
+            backgroundDiv.style.left = "-10px";
+            backgroundDiv.style.right = "-10px";
+            backgroundDiv.style.bottom = "-10px";
+            backgroundDiv.style.zIndex = "0";
+
+            backgroundDiv.style.opacity = "0.7";
+
+            element.appendChild(backgroundDiv);
+
+            let contentContainer = document.createElement("div");
+            contentContainer.classList.add("spotify-content-container");
+            contentContainer.style.position = "relative";
+            contentContainer.style.zIndex = "1";
+            contentContainer.style.padding = "10px";
+            contentContainer.style.display = "flex";
+            contentContainer.style.flexDirection = "column";
+            contentContainer.style.alignItems = "center";
+            contentContainer.style.justifyContent = "center";
+
+            if (item) {
+                g_index++;
+                contentContainer.innerHTML = `
+                            <h1>${item.name}</h1>
+                            <h2>${item.owner.display_name}</h2>    
+                        `;
+            } else {
+                contentContainer.innerHTML = `
+                    <h1></h1>
+                    <h2></h2>    
+                `;
+            }
+
+            element.appendChild(contentContainer);
+
+            divs[currentIndex] = element;
+        });
+    }
+
+    return {
+        nullEnd,
+        divs
+    }
 }
